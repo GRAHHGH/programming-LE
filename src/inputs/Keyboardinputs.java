@@ -1,6 +1,5 @@
 package inputs;
 
-import static utilz.Constants.Directions.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

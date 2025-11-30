@@ -4,13 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import static utilz.Constants.PlayerConstants.*;
-import static utilz.Constants.Directions.*;
 import static utilz.HelpMethods.*;
 
-import javax.imageio.ImageIO;
 
 import gamestates.Playing;
 import main.Game;
@@ -23,7 +19,7 @@ public class Player extends Entity{
     private int playerAction = IDLE;
     private boolean moving = false;
     private boolean left, up, right, down, jump;
-    private float playerSpeed = 1.5f;
+    private float playerSpeed = 1f;
     private int[][] lvlData;
     private float xDrawOffsetRight = 21 * Game.SCALE;
     private float xDrawOffsetLeft = 37 * Game.SCALE;
@@ -32,7 +28,7 @@ public class Player extends Entity{
 
     // jumping and Gravity
     private float airSpeed = 0f;
-    private float gravity = 0.02f * Game.SCALE;
+    private float gravity = 0.03f * Game.SCALE;
     private float jumpSpeed = -2.25f * Game.SCALE;
     private float fallSpeedAfterCollision = 0.05f * Game.SCALE;
     private boolean inAir = false;
@@ -356,7 +352,7 @@ public class Player extends Entity{
 
         hitbox.x = x;
         hitbox.y = y;
-        
+
         if(!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
     }

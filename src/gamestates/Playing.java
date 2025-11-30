@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -140,23 +139,37 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
-		if (!gameOver)
-			if (e.getButton() == MouseEvent.BUTTON1)
-				player.setAttacking(true);
+        if (!gameOver) {
+            if (paused) {
+                // 1. If PAUSED, send click to the menu
+                pauseOverlay.mousePressed(e);
+            } else {
+                // 2. If NOT PAUSED, allow player to attack
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    player.setAttacking(true);
+                }
+            }
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(!gameOver)
-        if(paused)
-            pauseOverlay.mouseReleased(e);
+        if (!gameOver) {
+            if (paused) {
+                // Buttons generally need a 'Release' event to trigger
+                pauseOverlay.mouseReleased(e);
+            }
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if(!gameOver)
-        if(paused)
-            pauseOverlay.mouseMoved(e);
+        if (!gameOver) {
+            if (paused) {
+                // Hover effects
+                pauseOverlay.mouseMoved(e);
+            }
+        }
     }
 
     public void unpauseGame(){
@@ -204,9 +217,12 @@ public class Playing extends State implements Statemethods {
     }
 
     public void mouseDragged(MouseEvent e){
-        if(!gameOver)
-        if(paused)
-            pauseOverlay.mouseDragged(e);
+        if (!gameOver) {
+            if (paused) {
+                // Volume slider needs dragging
+                pauseOverlay.mouseDragged(e);
+            }
+        }
     }
 
 
