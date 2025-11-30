@@ -15,5 +15,6 @@ public class MainGame {
         System.out.println("Okay Bye!");
     }
 
+    key.close();
     }
 }
