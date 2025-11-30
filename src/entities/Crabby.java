@@ -32,7 +32,7 @@ public class Crabby extends Enemy {
 
 
     public void update(int[][] lvlData, Player player) {
-        updateMove(lvlData, player);
+        updateBehavior(lvlData, player);
         updateAnimationTick();
         updateAttackBox();
     }
@@ -42,7 +42,7 @@ public class Crabby extends Enemy {
         attackBox.y = hitbox.y;
     }
 
-    private void updateMove(int[][] lvlData, Player player) {
+    private void updateBehavior(int[][] lvlData, Player player) {
         if (firstUpdate)
             firstUpdateCheck(lvlData);
 
@@ -60,11 +60,22 @@ public class Crabby extends Enemy {
                         newState(ATTACK);
                     move(lvlData);
                     break;
+                case ATTACK:
+                    if(aniIndex == 0)
+                        attackChecked = false;
+
+                    
+                    if(aniIndex == 3 && !attackChecked)
+                        checkPlayerHit(attackBox, player);
+                    break;
+                case HIT:
+                    break;
             }
         if (!IsEntityOnFloor(hitbox, lvlData)) 
             inAir = true;
         }
     }
+
 
     public void drawAttackBox(Graphics g, int xLvlOffset){
         g.setColor(Color.red);

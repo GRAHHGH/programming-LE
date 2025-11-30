@@ -12,6 +12,7 @@ import static utilz.HelpMethods.*;
 
 import javax.imageio.ImageIO;
 
+import gamestates.Playing;
 import main.Game;
 import utilz.LoadSave;
 
@@ -50,7 +51,7 @@ public class Player extends Entity{
     private int healthBarYStart= (int)(14 * Game.SCALE);
 
     private int maxHealth = 100;
-    private int curretHealth = maxHealth;
+    private int currentHealth = maxHealth;
     private int healthWidth = healthBarWidth;
 
     // attack box
@@ -59,8 +60,11 @@ public class Player extends Entity{
     private int flipX = 0;
     private int flipW =  1;
 
-    public Player(float x, float y, int width, int height) {
+    private boolean attackChecked;
+    private Playing playing;
+    public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, (int)(78 * Game.SCALE), (int)(58 * Game.SCALE));
+        this.playing = playing;
         loadAnimations();
         initHitbox(x, y, 20*Game.SCALE, 28*Game.SCALE);
         initAttackBox();
@@ -72,12 +76,25 @@ public class Player extends Entity{
 
     public void update(){
         updateHealthBar();
-        updateAttackBox();
+        if(currentHealth <= 0){
+            playing.setGameOver(true);
+            return;
+        }
 
+        updateAttackBox();
         updatePos();
+        if(attacking)
+        checkAttack();
         updateAnimationTick();
         setAnimation();
 
+    }
+
+    private void checkAttack() {
+        if(attackChecked || aniIndex != 1)
+            return;
+        attackChecked = true;
+        playing.checkEnemyHit(attackBox);
     }
 
     private void updateAttackBox() {
@@ -97,7 +114,7 @@ public class Player extends Entity{
     }
 
     private void updateHealthBar() {
-        healthWidth = (int)((curretHealth / (float)maxHealth) * healthBarWidth);
+        healthWidth = (int)((currentHealth / (float)maxHealth) * healthBarWidth);
 
     }
 
@@ -133,11 +150,13 @@ public class Player extends Entity{
 
     private void updateAnimationTick() {
             aniTick++;
+
             if (aniTick >= aniSpeed) {
                 aniTick = 0;
                 aniIndex++;
                 if (aniIndex >= GetSpriteAmount(playerAction)) {
                     aniIndex = 0;
+                    attackChecked = false;
                     
                     // If finished the ATTACK animation, stop attacking.
                     if (playerAction == ATTACK) {
@@ -153,6 +172,11 @@ public class Player extends Entity{
             // 1. CHECK ATTACK FIRST 
             if (attacking) {
                 playerAction = ATTACK;
+                if(oldAction != ATTACK){
+                    aniIndex = 0;
+                    aniTick = 0;
+                    return;
+                }
             } 
             // 2. Then check In Air
             else if (inAir) {
@@ -251,15 +275,15 @@ public class Player extends Entity{
 
         }
 
-        private void changeHealth(int value){
-            curretHealth += value;
+        void changeHealth(int value){
+            currentHealth += value;
 
-            if(curretHealth <= 0){
-                curretHealth = 0;
+            if(currentHealth <= 0){
+                currentHealth = 0;
                 // gameOver();
             }
-            else if(curretHealth >= maxHealth)
-                curretHealth = maxHealth;
+            else if(currentHealth >= maxHealth)
+                currentHealth = maxHealth;
         }
 
         private void loadAnimations() {
@@ -321,6 +345,20 @@ public class Player extends Entity{
 
     public void setJump(boolean jump){
         this.jump = jump;
+    }
+
+    public void resetAll() {
+        resetDirBooleans();
+        inAir = false;
+        moving = false;
+        playerAction = IDLE;
+        currentHealth = maxHealth;
+
+        hitbox.x = x;
+        hitbox.y = y;
+        
+        if(!IsEntityOnFloor(hitbox, lvlData))
+            inAir = true;
     }
 
 }
