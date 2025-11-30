@@ -24,7 +24,8 @@ public class Player extends Entity{
     private boolean left, up, right, down, jump;
     private float playerSpeed = 1.5f;
     private int[][] lvlData;
-    private float xDrawOffset = 28 * Game.SCALE;
+    private float xDrawOffsetRight = 21 * Game.SCALE;
+    private float xDrawOffsetLeft = 37 * Game.SCALE;
     private float yDrawOffset = 15 * Game.SCALE;
     private boolean attacking = false;
 
@@ -90,8 +91,7 @@ public class Player extends Entity{
         }
 
         // Y POSITION
-        // Since we kept yDrawOffset at 15, the hitbox is higher up on the body.
-        // We might need to push the attack box down slightly to align with the hammer.
+        // need to push the attack box down slightly to align with the hammer.
         attackBox.y = hitbox.y + (Game.SCALE * 10);
     }
 
@@ -101,10 +101,23 @@ public class Player extends Entity{
     }
 
     public void render(Graphics g, int lvlOffset){
-        g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - lvlOffset + flipX, (int)(hitbox.y - yDrawOffset), width * flipW, height, null);
+    // 1. Pick the correct offset based on which way we are looking
+        float drawXOffset = xDrawOffsetRight;
+        
+        if (flipW == -1) {
+            drawXOffset = xDrawOffsetLeft;
+        }
 
+        // 2. Draw using the variable 'drawXOffset'
+        g.drawImage(animations[playerAction][aniIndex], 
+                (int) (hitbox.x - drawXOffset) - lvlOffset + flipX, 
+                (int) (hitbox.y - yDrawOffset), 
+                width * flipW, height, null);
+
+        // 3. Debug
         drawAttackBox(g, lvlOffset);
         drawUI(g);
+        drawHitbox(g, lvlOffset); // Uncomment if you need to see the pink box
     }
 
     private void drawAttackBox(Graphics g, int lvlOffsetX) {
