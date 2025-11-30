@@ -67,7 +67,7 @@ public class Player extends Entity{
     }
 
     private void initAttackBox() {
-        attackBox = new Rectangle2D.Float(x, y, (int)(20 * Game.SCALE), (int)(20 * Game.SCALE));
+        attackBox = new Rectangle2D.Float(x, y, (int)(35 * Game.SCALE), (int)(20 * Game.SCALE));
     }
 
     public void update(){
@@ -81,18 +81,19 @@ public class Player extends Entity{
     }
 
     private void updateAttackBox() {
-        // RIGHT
-        if (right || (flipW == 1)) {
-            attackBox.x = hitbox.x + hitbox.width + (int)(Game.SCALE * 1);
+        // flipW == 1 means we are visually facing Right
+        // flipW == -1 means we are visually facing Left
+        int attackGap = (int)(5 * Game.SCALE);
+        if (flipW == 1) {
+            // RIGHT SIDE
+            attackBox.x = hitbox.x + hitbox.width + attackGap;
         } 
-        // LEFT
-        else if (left || (flipW == -1)) {
-            attackBox.x = hitbox.x - attackBox.width - (int)(Game.SCALE * 1);
+        else {
+            // LEFT SIDE
+            attackBox.x = hitbox.x - attackBox.width- attackGap;
         }
-
-        // Y POSITION
-        // need to push the attack box down slightly to align with the hammer.
-        attackBox.y = hitbox.y + (Game.SCALE * 10);
+        // Y Position
+        attackBox.y = hitbox.y + (Game.SCALE * 7);
     }
 
     private void updateHealthBar() {
