@@ -43,6 +43,22 @@ public class Crabby extends Enemy {
         }
     }
 
+    public int flipX(){
+        if(walkDir == right)
+            return width;
+        else
+            return 0;
+    }
+
+    public int flipW(){
+        if(walkDir == right)
+            return -1;
+        else    
+            return 1;
+    }
+
+
+
     public int getXDrawOffset() {
         return xDrawOffset;
     }

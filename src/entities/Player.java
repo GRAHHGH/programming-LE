@@ -101,14 +101,13 @@ public class Player extends Entity{
     }
 
     public void render(Graphics g, int lvlOffset){
-    // 1. Pick the correct offset based on which way we are looking
+
         float drawXOffset = xDrawOffsetRight;
         
         if (flipW == -1) {
             drawXOffset = xDrawOffsetLeft;
         }
 
-        // 2. Draw using the variable 'drawXOffset'
         g.drawImage(animations[playerAction][aniIndex], 
                 (int) (hitbox.x - drawXOffset) - lvlOffset + flipX, 
                 (int) (hitbox.y - yDrawOffset), 
@@ -117,7 +116,7 @@ public class Player extends Entity{
         // 3. Debug
         drawAttackBox(g, lvlOffset);
         drawUI(g);
-        drawHitbox(g, lvlOffset); // Uncomment if you need to see the pink box
+        drawHitbox(g, lvlOffset); // Uncomment if need to see the pink box
     }
 
     private void drawAttackBox(Graphics g, int lvlOffsetX) {
