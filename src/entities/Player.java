@@ -24,7 +24,7 @@ public class Player extends Entity{
     private boolean left, up, right, down, jump;
     private float playerSpeed = 1.5f;
     private int[][] lvlData;
-    private float xDrawOffset = 20 * Game.SCALE;
+    private float xDrawOffset = 28 * Game.SCALE;
     private float yDrawOffset = 15 * Game.SCALE;
     private boolean attacking = false;
 
@@ -80,11 +80,18 @@ public class Player extends Entity{
     }
 
     private void updateAttackBox() {
-        if(right){
-            attackBox.x = hitbox.x + hitbox.width + (int)(Game.SCALE * 10);
-        }else if(left){
-            attackBox.x = hitbox.x - hitbox.width - (int)((Game.SCALE * 1) - 15);
+        // RIGHT
+        if (right || (flipW == 1)) {
+            attackBox.x = hitbox.x + hitbox.width + (int)(Game.SCALE * 1);
+        } 
+        // LEFT
+        else if (left || (flipW == -1)) {
+            attackBox.x = hitbox.x - attackBox.width - (int)(Game.SCALE * 1);
         }
+
+        // Y POSITION
+        // Since we kept yDrawOffset at 15, the hitbox is higher up on the body.
+        // We might need to push the attack box down slightly to align with the hammer.
         attackBox.y = hitbox.y + (Game.SCALE * 10);
     }
 
