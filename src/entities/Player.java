@@ -2,11 +2,11 @@ package entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
-
 
 import gamestates.Playing;
 import main.Game;
@@ -64,6 +64,13 @@ public class Player extends Entity{
         loadAnimations();
         initHitbox(x, y, 20*Game.SCALE, 28*Game.SCALE);
         initAttackBox();
+    }
+
+    public void setSpawn(Point spawn){
+        this.x = spawn.x;
+        this.y = spawn.y;
+        hitbox.x = x;
+        hitbox.y = y;
     }
 
     private void initAttackBox() {
@@ -229,7 +236,8 @@ public class Player extends Entity{
                     hitbox.y += airSpeed;
                     airSpeed += gravity;
                     updateXPos(xSpeed);
-                } else {
+                } 
+                else {
                     hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
                     if (airSpeed > 0)
                         resetInAir();
@@ -238,7 +246,8 @@ public class Player extends Entity{
                     updateXPos(xSpeed);
                 }
 
-            } else
+            } 
+            else
                 updateXPos(xSpeed);
             moving = true;
         
