@@ -3,12 +3,22 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
+import main.Game;
 
 public abstract class Entity {
 
     protected float x,y;
     protected int width, height;
     protected Rectangle2D.Float hitbox;
+    protected int aniTick, aniIndex;
+    protected int state;
+    protected float airSpeed;
+    protected boolean inAir = false;
+    protected int maxHealth;
+    protected int currentHealth;
+    protected Rectangle2D.Float attackBox;
+    protected float walkSpeed;
+
 
     public Entity(float x, float y, int width, int height){
         this.x = x;
@@ -19,18 +29,22 @@ public abstract class Entity {
     }
 
     protected void drawHitbox(Graphics g, int xLvlOffset){ // for debugging
-       g.setColor(Color.RED);
-       g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
-        
+       if(Game.DRAW_HITBOXES){ // if you press F5 the hitbox will appear
+        g.setColor(Color.RED);
+        g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
+       }  
     }
 
-    protected void initHitbox(float x, float y, float width, float height) {
-       hitbox = new Rectangle2D.Float(x, y, width, height);
+    protected void initHitbox(int width, int height) {
+       hitbox = new Rectangle2D.Float(x, y, (int)(width * Game.SCALE), (int)(height * Game.SCALE));
     }
 
     public Rectangle2D getHitbox(){
         return hitbox;
     }
 
+    public int getEnemyState(){
+        return state;
+    }
     
 }

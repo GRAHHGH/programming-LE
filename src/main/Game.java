@@ -28,7 +28,7 @@ public class Game implements Runnable {
     public final static int TILES_SIZE = (int)(TILES_DEFAULT_SIZE * SCALE);
     public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
-   
+    public static boolean DRAW_HITBOXES = false;
 
     public Game(){
         initClasses();
@@ -36,7 +36,6 @@ public class Game implements Runnable {
         gameWindow = new GameWindow(gamePanel);
         gamePanel.setFocusable(true);
         gamePanel.requestFocus();
-
         startGameLoop();
     }
 

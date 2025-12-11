@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import gamestates.Gamestate;
+import main.Game;
 import main.GamePanel;
 
 public class Keyboardinputs implements KeyListener {
@@ -24,6 +25,12 @@ public class Keyboardinputs implements KeyListener {
                 gamePanel.getGame().getPlaying().keyPressed(e);
                 break;
             default:
+                break;
+        }
+
+        switch(e.getKeyCode()){
+            case KeyEvent.VK_F5:
+                Game.DRAW_HITBOXES = !Game.DRAW_HITBOXES;
                 break;
         }
     }
