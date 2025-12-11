@@ -30,19 +30,18 @@ public class Player extends Entity{
 
     // status bar UI
     private BufferedImage statusBarImg;
-
     private int statusBarWidth = (int)(192 * Game.SCALE);
     private int statusBarHeight = (int)(58 * Game.SCALE);
     private int statusBarX = (int)(10 * Game.SCALE);
     private int statusBarY= (int)(10 * Game.SCALE);
 
+    // health Bar box
     private int healthBarWidth= (int)(150 * Game.SCALE);
     private int healthBarHeight= (int)(4 * Game.SCALE);
     private int healthBarXStart= (int)(34 * Game.SCALE);
     private int healthBarYStart= (int)(14 * Game.SCALE);
 
-    private int maxHealth = 100;
-    private int currentHealth = maxHealth;
+    // for HP
     private int healthWidth = healthBarWidth;
 
     private int flipX = 0;

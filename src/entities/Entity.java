@@ -28,14 +28,14 @@ public abstract class Entity {
         
     }
 
-    protected void drawAttackBox(Graphics g, int lvlOffsetX) { // for hitbox press f5
+    protected void drawAttackBox(Graphics g, int lvlOffsetX) { //hitbox 
         if(Game.DRAW_HITBOXES){
             g.setColor(Color.red);
             g.drawRect((int)attackBox.x - lvlOffsetX, (int)attackBox.y, (int)attackBox.width, (int)attackBox.height);
         }
     }
-    
-    protected void drawHitbox(Graphics g, int xLvlOffset){ // for debugging
+
+    protected void drawHitbox(Graphics g, int xLvlOffset){ 
        if(Game.DRAW_HITBOXES){ // if you press F5 the hitbox will appear
         g.setColor(Color.RED);
         g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
@@ -54,4 +54,7 @@ public abstract class Entity {
         return state;
     }
     
+    public int getAniIndex(){
+        return aniIndex;
+    }
 }
