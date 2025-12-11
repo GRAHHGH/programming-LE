@@ -136,13 +136,6 @@ public class Player extends Entity{
         drawHitbox(g, lvlOffset); 
     }
 
-    private void drawAttackBox(Graphics g, int lvlOffsetX) { // for hitbox press f5
-        if(Game.DRAW_HITBOXES){
-            g.setColor(Color.red);
-            g.drawRect((int)attackBox.x - lvlOffsetX, (int)attackBox.y, (int)attackBox.width, (int)attackBox.height);
-        }
-    }
-
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);

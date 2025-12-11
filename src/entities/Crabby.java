@@ -2,8 +2,6 @@ package entities;
 
 import static utilz.HelpMethods.*;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 
 import static utilz.Constants.EnemyConstants.*;
@@ -75,15 +73,6 @@ public class Crabby extends Enemy {
             inAir = true;
         }
     }
-
-
-    public void drawAttackBox(Graphics g, int xLvlOffset){
-        if(Game.DRAW_HITBOXES){
-            g.setColor(Color.red);
-            g.drawRect((int)(attackBox.x - xLvlOffset), (int)attackBox.y, (int)attackBox.width, (int)attackBox.height);
-        }
-    }
-
 
     public int flipX(){
         if(walkDir == right)
