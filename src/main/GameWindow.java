@@ -16,6 +16,9 @@ public class GameWindow {
         jframe.pack();
         jframe.setLocationRelativeTo(null);
         jframe.setVisible(true); 
+        jframe.setAlwaysOnTop(true);
+
+        
         jframe.addWindowFocusListener(new WindowFocusListener() {
 
             @Override

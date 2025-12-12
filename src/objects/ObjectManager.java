@@ -41,7 +41,7 @@ public class ObjectManager {
 
     public void checkObjectHit(Rectangle2D.Float attackBox){
         for(GameContainer gc : containers)
-            if(gc.isActive()){
+            if(gc.isActive() && !gc.doAnimation){
                 if(gc.getHitbox().intersects(attackBox)){
                     gc.setAnimation(true);
                     int type = 0;
@@ -58,8 +58,8 @@ public class ObjectManager {
 
 
      public void loadObjects(Level newLevel) {
-        potions = newLevel.getPotions();
-        containers = newLevel.getContainers();
+        potions = new ArrayList<>(newLevel.getPotions());
+        containers = new ArrayList<>(newLevel.getContainers());
     }
 
     private void loadImgs() {
@@ -126,10 +126,16 @@ public class ObjectManager {
 }
 
     public void resetAllObject(){
+        System.out.println("Sive of Arrays: " + potions.size() + "|" + containers.size());
+        loadObjects(playing.getLevelManager().getCurrentLevel());
+
         for(Potion p : potions)
             p.reset();
             for(GameContainer gc : containers)
                 gc.reset();
+        
+        System.out.println("Sive of Arrays after: " + potions.size() + "|" + containers.size());
+
     }
 
 
