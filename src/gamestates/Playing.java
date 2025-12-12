@@ -106,7 +106,8 @@ public class Playing extends State implements Statemethods {
     }
 
     private void checkCloseToBorder() {
-        int playerX = (int) player.getHitbox().getX();
+        int playerX = (int) Math.round(player.getHitbox().getX()); 
+        
         int diff = playerX - xLvlOffset;
 
         if(diff > rightBorder)
@@ -114,6 +115,7 @@ public class Playing extends State implements Statemethods {
         else if(diff < leftBorder)
             xLvlOffset += diff - leftBorder;
 
+        // Boundary checks (already correct)
         if(xLvlOffset > maxLvlOffsetX)
             xLvlOffset = maxLvlOffsetX;
         else if (xLvlOffset < 0)
@@ -145,10 +147,10 @@ public class Playing extends State implements Statemethods {
     private void drawCLouds(Graphics g) {
 
         for(int i = 0; i < 3 ; i++)
-            g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int)(xLvlOffset*0.4), (int)(204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+            g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int)Math.round(xLvlOffset*0.4f), (int)(204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
 
         for(int i =0; i <smallCloudsPos.length ; i++)
-            g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i -     (int)(xLvlOffset*0.6), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
+            g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int)Math.round(xLvlOffset*0.6f), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
     }
 
     public void resetAll() {
