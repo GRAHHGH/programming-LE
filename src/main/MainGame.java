@@ -12,8 +12,8 @@ public class MainGame {
     yn = key.next().charAt(0);
 
     if(yn == 'y' || yn == 'Y'){
-        typeMessage(secretfile.YES);
-        typeMessage(secretfile.jaryl);
+     //   typeMessage(secretfile.YES);
+     //   typeMessage(secretfile.jaryl);
         new Game(); // to access contructor which is the game.java
     }
     else{
