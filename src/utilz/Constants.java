@@ -31,7 +31,7 @@ public class Constants {
                 case RED_POTION, BLUE_POTION:
                     return 7;
                 case BARREL, BOX:
-                    return 9;
+                    return 8;
             }
             
             return 1;
