@@ -46,7 +46,7 @@ public abstract class Entity {
        hitbox = new Rectangle2D.Float(x, y, (int)(width * Game.SCALE), (int)(height * Game.SCALE));
     }
 
-    public Rectangle2D getHitbox(){
+    public Rectangle2D.Float getHitbox(){
         return hitbox;
     }
 
