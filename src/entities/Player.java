@@ -87,18 +87,23 @@ public class Player extends Entity{
                 playing.setPlayerDying(true);
             }
             else if(aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1){
-                playing.setGameOver(true);
+                if(inAir){
+                    updatePos();
+                }
+                else{
+                    playing.setGameOver(true);
+                }
             }
             else{
                 updateAnimationTick();
+                updatePos();
             }
-
-
             return;
         }
 
         updateAttackBox();
         updatePos();
+
         if(moving){
             checkPotionTouched();
             checkSpikesTouched();
@@ -227,7 +232,7 @@ public class Player extends Entity{
         private void updatePos(){
             moving = false;
 
-        if(jump){
+        if(jump && state != DEAD){
             jump();
         }
         if(!inAir)
@@ -236,16 +241,18 @@ public class Player extends Entity{
 
         float xSpeed = 0;
 
-        if (left) {
-            xSpeed = -walkSpeed;
-            flipX = width;
-            flipW = -1;
-        } 
+        if(state != DEAD) {
+            if (left) {
+                xSpeed = -walkSpeed;
+                flipX = width;
+                flipW = -1;
+            } 
 
-        if (right) {
-            xSpeed += walkSpeed;
-            flipX = 0;
-            flipW = 1;
+            if (right) {
+                xSpeed += walkSpeed;
+                flipX = 0;
+                flipW = 1;
+            }
         }
 
         if(!inAir)

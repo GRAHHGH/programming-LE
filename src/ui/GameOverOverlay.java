@@ -12,7 +12,6 @@ import gamestates.Playing;
 import main.Game;
 import utilz.LoadSave;
 
-
 public class GameOverOverlay {
     
     private Playing playing;
@@ -50,7 +49,6 @@ public class GameOverOverlay {
 
         menu.draw(g);
         play.draw(g);
-
     }
 
     public void update(){
@@ -86,9 +84,8 @@ public class GameOverOverlay {
             }         
         }
         else if (isIn(play, e))
-            if(play.isMousePressed()){
+            if(play.isMousePressed())
                 playing.resetAll();
-            }
         menu.resetBools();
         play.resetBools();
     }
