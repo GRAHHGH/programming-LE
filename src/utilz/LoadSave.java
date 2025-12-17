@@ -12,7 +12,8 @@ import javax.imageio.ImageIO;
 public class LoadSave {
     
     public static final String PLAYER_ATLAS = "res/finalCharacter.png";
-    public static final String LEVEL_ATLAS = "res/outside.png";
+    public static final String LEVEL_ATLAS = "res/outside_sprites.png";
+    public static final String LEVEL_DESIGN_ATLAS = "res/design_blocks.png";
     public static final String MENU_BUTTONS = "res/Buttons.png";
     public static final String MENU_BACKGROUND = "res/menubackground.png";
     public static final String PAUSE_BACKGROUND = "res/pause_menu.png";

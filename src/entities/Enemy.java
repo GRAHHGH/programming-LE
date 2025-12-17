@@ -73,7 +73,7 @@ public abstract class Enemy extends Entity {
         int playerTileY = (int)(player.getHitbox().getY() / Game.TILES_SIZE);
         if(playerTileY == tileY)
             if(isPlayerInRange(player)){
-                if(isSightClear(lvlData, hitbox, player.hitbox, tileY))
+                if(IsSightClear(lvlData, hitbox, player.hitbox, tileY))
                     return true;
             }
 

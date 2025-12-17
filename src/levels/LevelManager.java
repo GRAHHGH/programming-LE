@@ -44,22 +44,24 @@ public class LevelManager {
     }
 
 
-    private void importOutsideSprites() {
-        BufferedImage img = LoadSave.GetSpriteAtlas("res/outside.png");
-        levelSprites = new BufferedImage[2];
-            for(int i = 0; i < 2; i++){
-                levelSprites[i] = img.getSubimage(i*32, 0, 32, 32);
-            }
-    }
+	private void importOutsideSprites() {
+		BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
+		levelSprites = new BufferedImage[48];
+		for (int j = 0; j < 4; j++)
+			for (int i = 0; i < 12; i++) {
+				int index = j * 12 + i;
+				levelSprites[index] = img.getSubimage(i * 32, j * 32, 32, 32);
+			}
+	}
 
 
-    public void draw(Graphics g, int lvlOffset){
-        for(int j = 0 ; j < Game.TILES_IN_HEIGHT; j++)
-            for(int i = 0; i < levels.get(lvlIndex).getLevelData()[0].length; i++){
-                int index = levels.get(lvlIndex).getSpriteIndex(i, j);
-                g.drawImage(levelSprites[index], Game.TILES_SIZE*i - lvlOffset, Game.TILES_SIZE*j, Game.TILES_SIZE, Game.TILES_SIZE, null);
-            }
-    }
+	public void draw(Graphics g, int lvlOffset) {
+		for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
+			for (int i = 0; i < levels.get(lvlIndex).getLevelData()[0].length; i++) {
+				int index = levels.get(lvlIndex).getSpriteIndex(i, j);
+				g.drawImage(levelSprites[index], Game.TILES_SIZE * i - lvlOffset, Game.TILES_SIZE * j, Game.TILES_SIZE, Game.TILES_SIZE, null);
+			}
+	}
 
     public void update(){
 
@@ -70,5 +72,9 @@ public class LevelManager {
 
     public int getAmountOfLevels(){
         return levels.size();
+    }
+
+    public int getLevelIndex(){
+        return lvlIndex;
     }
 }

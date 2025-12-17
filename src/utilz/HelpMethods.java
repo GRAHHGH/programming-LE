@@ -38,7 +38,7 @@ public class HelpMethods {
         float xIndex = x / Game.TILES_SIZE;
         float yIndex = y / Game.TILES_SIZE;
 
-		return isTileSolid((int) xIndex, (int) yIndex, lvlData);
+		return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
 
     }   
 
@@ -46,13 +46,17 @@ public class HelpMethods {
 		return IsSolid(p.getHitbox().x + p.getHitbox().width / 2, p.getHitbox().y + p.getHitbox().height / 2, lvlData);
 	} 
 
-	public static boolean isTileSolid(int xTile, int yTile, int[][] lvlData){
-        int value = lvlData[yTile][xTile];
+	public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) { // to check if the tile is solid or not
+		int value = lvlData[yTile][xTile];
 
-        if(value != 0)
-            return true;
-        else
-            return false;
+		if(value == 11){ // for transparent of non solid blocks
+			return false;
+		}
+		if(value < 48){ // for solid blocks
+			return true;
+		}
+
+		return false;
 	}
 
     public static float GetEntityXPosNextToWall(Rectangle2D.Float hitbox, float xSpeed) {
@@ -107,47 +111,45 @@ public class HelpMethods {
 			return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);
 	}
 
-	public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData){
-		for(int i = 0; i < xEnd - xStart; i ++)
-			if(isTileSolid(xStart + i, y, lvlData))
+	public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
+		for (int i = 0; i < xEnd - xStart; i++)
+			if (IsTileSolid(xStart + i, y, lvlData))
 				return false;
 		return true;
 	}
 
-	public static boolean isAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData){
-		if(IsAllTilesClear(xStart, xEnd, y, lvlData))
-			for(int i = 0; i < xEnd - xStart; i ++){
-				if(!isTileSolid(xStart + i, y + 1, lvlData))
-					return false;				
-			}	
-			return true;	
+	public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
+		if (IsAllTilesClear(xStart, xEnd, y, lvlData))
+			for (int i = 0; i < xEnd - xStart; i++) {
+				if (!IsTileSolid(xStart + i, y + 1, lvlData))
+					return false;
+			}
+		return true;
 	}
 
 
-	public static boolean isSightClear(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile){
-		int firstXTile = (int)(firstHitbox.x / Game.TILES_SIZE);
-		int secondXTile = (int)(secondHitbox.x / Game.TILES_SIZE);
+	public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
+		int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
+		int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
 
-		if(firstXTile > secondXTile)
-			return isAllTilesWalkable(secondXTile, firstXTile, yTile, lvlData);		
+		if (firstXTile > secondXTile)
+			return IsAllTilesWalkable(secondXTile, firstXTile, yTile, lvlData);
 		else
-			return isAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);			
-	
+			return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);
 	}
 
-    public static int[][] GetLevelData(BufferedImage img){
-        int[][] lvlData = new int[img.getHeight()][img.getWidth()];
-        for(int j = 0; j < img.getHeight(); j++)
-            for(int i = 0; i < img.getWidth(); i++){
-                Color color = new Color(img.getRGB(i, j));
-                int value = color.getRed();
-                    if(value >= 2)
-                        value = 0;
-                lvlData[j][i] = value;
-            }
-        return lvlData;
-        
-    }
+	public static int[][] GetLevelData(BufferedImage img) {
+		int[][] lvlData = new int[img.getHeight()][img.getWidth()];
+		for (int j = 0; j < img.getHeight(); j++)
+			for (int i = 0; i < img.getWidth(); i++) {
+				Color color = new Color(img.getRGB(i, j));
+				int value = color.getRed();
+				if (value >= 48)
+					value = 0;
+				lvlData[j][i] = value;
+			}
+		return lvlData;
+	}
 
     public static ArrayList<Crabby> GetCrabs(BufferedImage img){
         ArrayList<Crabby> list = new ArrayList<>();
