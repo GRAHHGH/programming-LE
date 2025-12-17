@@ -85,5 +85,9 @@ public class VolumeButton extends PauseButton{
     public void setMousePressed(boolean mousePressed) {
         this.mousePressed = mousePressed;
     }
+
+    public float getFloatValue(){
+        return floatValue;
+    }
     
 }
