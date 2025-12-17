@@ -39,7 +39,8 @@ public class Playing extends State implements Statemethods {
     private Random rnd = new Random();
 
     private boolean gameOver;
-    private boolean lvlCompleted =  false;
+    private boolean lvlCompleted;
+    private boolean playerDying;
 
     public Playing(Game game){
         super(game);
@@ -95,7 +96,13 @@ public class Playing extends State implements Statemethods {
         else if(lvlCompleted){
             levelCompletedOverlay.update();
         }
-        else if(!gameOver){
+        else if(gameOver){
+            gameOverOverLay.update();
+        }
+        else if(playerDying){
+            player.update();
+        }
+        else{
             levelManager.update();
             player.update();
             objectManager.update(levelManager.getCurrentLevel().getLevelData(), player);
@@ -157,6 +164,7 @@ public class Playing extends State implements Statemethods {
         gameOver = false;
         paused = false;
         lvlCompleted = false;
+        playerDying = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
         objectManager.resetAllObject();
@@ -202,6 +210,9 @@ public class Playing extends State implements Statemethods {
                 }
             }
         }
+        else{
+            gameOverOverLay.mousePressed(e);
+        }
     }
 
     @Override
@@ -214,6 +225,9 @@ public class Playing extends State implements Statemethods {
             else if(lvlCompleted)
                     levelCompletedOverlay.mouseReleased(e);
         }
+        else{
+            gameOverOverLay.mouseReleased(e);
+        }
     }
 
     @Override
@@ -225,6 +239,9 @@ public class Playing extends State implements Statemethods {
             }
             else if(lvlCompleted)
                     levelCompletedOverlay.mouseMoved(e);
+        }
+        else{
+            gameOverOverLay.mouseMoved(e);
         }
     }
 
@@ -308,6 +325,10 @@ public class Playing extends State implements Statemethods {
 
     public LevelManager getLevelManager(){
         return levelManager;
+    }
+
+    public void setPlayerDying(boolean playerDying) {
+        this.playerDying = playerDying;
     }
 
 }

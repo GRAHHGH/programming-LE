@@ -15,6 +15,7 @@ import utilz.LoadSave;
 
 public class Player extends Entity{
     
+    // hitbox and basic player stuff like attacking and movement
     private BufferedImage[][] animations;
     private boolean moving = false;
     private boolean left, right, jump;
@@ -44,6 +45,7 @@ public class Player extends Entity{
     // for HP
     private int healthWidth = healthBarWidth;
 
+    // for left and right movement of player drawing
     private int flipX = 0;
     private int flipW =  1;
 
@@ -78,7 +80,20 @@ public class Player extends Entity{
     public void update(){
         updateHealthBar();
         if(currentHealth <= 0){
-            playing.setGameOver(true);
+            if(state != DEAD){
+                state = DEAD;
+                aniTick = 0;
+                aniIndex = 0;
+                playing.setPlayerDying(true);
+            }
+            else if(aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1){
+                playing.setGameOver(true);
+            }
+            else{
+                updateAnimationTick();
+            }
+
+
             return;
         }
 

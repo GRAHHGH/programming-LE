@@ -13,6 +13,7 @@ import main.Game;
 import static utilz.Constants.ObjectConstants.*;
 import static utilz.Constants.Projectiles.*;
 import static utilz.HelpMethods.CanCannonSeePlayer;
+import static utilz.HelpMethods.IsProjectileHittingLevel;
 
 public class ObjectManager {
 
@@ -72,7 +73,6 @@ public class ObjectManager {
             }
     }
 
-
      public void loadObjects(Level newLevel) {
         potions = new ArrayList<>(newLevel.getPotions());
         containers = new ArrayList<>(newLevel.getContainers());
@@ -123,8 +123,17 @@ public class ObjectManager {
 
     private void updateProjetiles(int[][] lvlData, Player player) {
         for(Projectile p : projectiles)
-            if(p.isActive())
+            if(p.isActive()){
                 p.updatePos();
+                if(p.getHitbox().intersects(player.getHitbox())){
+                    player.changeHealth(-25);
+                    p.setActive(false);
+            }
+            else if(IsProjectileHittingLevel(p, lvlData)){
+                p.setActive(false);
+            }
+
+            }
     }
 
     private boolean isPlayerInRange(Cannon c, Player player) {

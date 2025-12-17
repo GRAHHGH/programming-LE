@@ -1,6 +1,5 @@
 package main;
 import java.util.Scanner;
-import static main.secretfile.typeMessage;
 
 public class MainGame {
 
