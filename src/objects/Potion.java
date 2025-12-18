@@ -2,13 +2,13 @@ package objects;
 
 import main.Game;
 
-public class Potion extends GameObject {
+public class Potion extends GameObject { // Represents collectible potions with animated frames and a floating hover effect
 
     private float hoverOffset;
     private int maxHoverOffset, hoverDir = 1;
 
     public Potion(int x, int y, int objType) {
-        super(x, y, objType);
+        super(x, y, objType); // Initializes position and type
         doAnimation = true;
         initHitbox(7, 14);
         xDrawOffset = (int)(3*Game.SCALE);
@@ -17,11 +17,13 @@ public class Potion extends GameObject {
         maxHoverOffset = (int)(10 * Game.SCALE);
     }
 
+    // Updates both the sprite animation frames and the vertical hover position.
     public void update(){
         updateAnimationTick();
         updateHover();
     }
 
+    // Calculates a smooth up-and-down floating motion for the potion.
     private void updateHover() {
         hoverOffset += (0.075f * Game.SCALE * hoverDir);
 

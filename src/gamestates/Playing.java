@@ -19,43 +19,47 @@ import ui.PauseOverlay;
 import utilz.LoadSave;
 import static utilz.Constants.Environment.*;
 
+// The primary gamestate for active gameplay, managing entities, levels, and camera offsets
 public class Playing extends State implements Statemethods {
     public Player player;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
     private ObjectManager objectManager;
+
+    // UI Overlays for different game situations
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverLay;
     private LevelCompletedOverlay levelCompletedOverlay;
-    private boolean paused = false; 
 
+    // Camera scrolling variables
     private int xLvlOffset;
     private int leftBorder = (int)(0.5*Game.GAME_WIDTH);
     private int rightBorder = (int)(0.5*Game.GAME_WIDTH);
-    private int maxLvlOffsetX;  
-    
+    private int maxLvlOffsetX; 
+
     private BufferedImage backgroundImg, bigCloud, smallCloud;
     private int[] smallCloudsPos;
     private Random rnd = new Random();
 
+    // State flags to determine which update/draw logic to run
+    private boolean paused = false;
     private boolean gameOver;
     private boolean lvlCompleted;
     private boolean playerDying;
 
     public Playing(Game game){
         super(game);
-        initClasses();
+        initClasses(); // Instantiate all sub-managers and overlays
 
+        // Randomize cloud positions for a dynamic sky background
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
         bigCloud = LoadSave.GetSpriteAtlas(LoadSave.BIG_CLOUDS);
         smallCloud = LoadSave.GetSpriteAtlas(LoadSave.SMALL_CLOUDS);
         smallCloudsPos = new int[8];
         for(int i = 0; i <smallCloudsPos.length; i++)
             smallCloudsPos[i] = (int)(90*Game.SCALE) + rnd.nextInt((int) (100*Game.SCALE));
-
         calcLvlOffsets();
         loadStartLevel();
-
     } 
 
     public void loadNextLevel(){
@@ -102,7 +106,7 @@ public class Playing extends State implements Statemethods {
         else if(playerDying){
             player.update();
         }
-        else{
+        else{ // Standard gameplay update cycle
             levelManager.update();
             player.update();
             objectManager.update(levelManager.getCurrentLevel().getLevelData(), player);
@@ -112,7 +116,7 @@ public class Playing extends State implements Statemethods {
 
     }
 
-    private void checkCloseToBorder() {
+    private void checkCloseToBorder() { // Calculates the camera's x-offset to keep the player centered as they move through the level.
         int playerX = (int) Math.round(player.getHitbox().getX()); 
         
         int diff = playerX - xLvlOffset;
@@ -130,7 +134,7 @@ public class Playing extends State implements Statemethods {
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void draw(Graphics g) { // Render order: Background -> Clouds -> Level -> Entities -> UI Overlays
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 
         drawCLouds(g);
@@ -140,7 +144,7 @@ public class Playing extends State implements Statemethods {
         enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
 
-        if(paused){
+        if(paused){ // Render situational UI based on state flags
             g.setColor(new Color(0,0,0, 150));
             g.fillRect(0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pauseOverlay.draw(g);
@@ -151,7 +155,7 @@ public class Playing extends State implements Statemethods {
             levelCompletedOverlay.draw(g);
     }
 
-    private void drawCLouds(Graphics g) {
+    private void drawCLouds(Graphics g) { // Renders big and small clouds with "Parallax Scrolling" for a depth effect.
 
         for(int i = 0; i < 3 ; i++)
             g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int)Math.round(xLvlOffset*0.4f), (int)(204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
@@ -160,7 +164,7 @@ public class Playing extends State implements Statemethods {
             g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int)Math.round(xLvlOffset*0.6f), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
     }
 
-    public void resetAll() {
+    public void resetAll() { // Resets all game managers and player stats when restarting a level.
         gameOver = false;
         paused = false;
         lvlCompleted = false;
@@ -194,6 +198,7 @@ public class Playing extends State implements Statemethods {
     public void mouseClicked(MouseEvent e) {
     }
 
+    // --- Input and Event Handling ---
     @Override
     public void mousePressed(MouseEvent e) {
         if (!gameOver) {
@@ -308,27 +313,22 @@ public class Playing extends State implements Statemethods {
         }
     }
 
-
+    // --- Getters and Setters for Sub-Managers ---
     public void windowFocusLost(){
         player.resetDirBooleans();
     }
-
     public Player getPlayer(){
         return player;
     }
-
     public EnemyManager getEnemyManager(){
         return enemyManager;
     }
-
     public ObjectManager getObjectManager(){
         return objectManager;
     }
-
     public LevelManager getLevelManager(){
         return levelManager;
     }
-
     public void setPlayerDying(boolean playerDying) {
         this.playerDying = playerDying;
     }

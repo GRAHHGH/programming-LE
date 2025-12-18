@@ -12,6 +12,7 @@ import gamestates.Playing;
 import main.Game;
 import utilz.LoadSave;
 
+// Manages the UI elements and interactions triggered upon the player's death
 public class GameOverOverlay {
     
     private Playing playing;
@@ -21,8 +22,8 @@ public class GameOverOverlay {
 
     public GameOverOverlay(Playing playing){
         this.playing =  playing;
-        createImg();
-        createButtons();
+        createImg(); // Loads and scales the death screen background
+        createButtons(); // Initializes the "Retry" and "Menu" buttons
     }
 
     private void createButtons() {
@@ -41,7 +42,8 @@ public class GameOverOverlay {
         imgY = (int)(100 * Game.SCALE);
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g){ 
+        // Renders a semi-transparent black background and the UI components
         g.setColor(new Color(0, 0, 0, 200));
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 
@@ -59,7 +61,7 @@ public class GameOverOverlay {
     public void keyPressed(KeyEvent e){
         
     }
-
+    // Helper to detect if the mouse cursor is within a button's boundary.
     private boolean isIn(UrmButton b,  MouseEvent e){
         return b.getBounds().contains(e.getX(),e.getY());
     }
@@ -74,6 +76,7 @@ public class GameOverOverlay {
             play.setMouseOver(true);
     }
 
+    // Handles the logic for clicking buttons on the death screen
     public void mouseReleased(MouseEvent e){
         if(isIn(menu, e)){
             if(menu.isMousePressed()){

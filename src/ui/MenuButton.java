@@ -8,6 +8,7 @@ import gamestates.Gamestate;
 import utilz.LoadSave;
 import static utilz.Constants.UI.Buttons.*;
 
+// Represents a single interactive button in the Main Menu with frame-based animations
 public class MenuButton {
 	private int xPos, yPos, rowIndex, index;
 	private int xOffsetCenter = B_WIDTH / 2;
@@ -22,15 +23,16 @@ public class MenuButton {
 		this.yPos = yPos;
 		this.rowIndex = rowIndex;
 		this.state = state;
-		loadImgs();
-		initBounds();
+		loadImgs(); // Slices the buttons atlas
+		initBounds(); // Defines the clickable area
 	}
 
-	private void initBounds() {
+	private void initBounds() { // Initializes the rectangle bounds centered around the xPos.
 		bounds = new Rectangle(xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT);
 
 	}
 
+	// Loads the specific button row from the atlas and stores the 3 interaction frames
 	private void loadImgs() {
 		imgs = new BufferedImage[3];
 		BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MENU_BUTTONS);
@@ -42,6 +44,7 @@ public class MenuButton {
 		g.drawImage(imgs[index], xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT, null);
 	}
 
+	// logic for switching visual frames based on mouse state
 	public void update() {
 		index = 0;
 		if (mouseOver)
@@ -50,35 +53,29 @@ public class MenuButton {
 			index = 2;
 	}
 
+	// --- Standard Getters and Setters ---
 	public boolean isMouseOver() {
 		return mouseOver;
 	}
-
 	public void setMouseOver(boolean mouseOver) {
 		this.mouseOver = mouseOver;
 	}
-
 	public boolean isMousePressed() {
 		return mousePressed;
 	}
-
 	public void setMousePressed(boolean mousePressed) {
 		this.mousePressed = mousePressed;
 	}
-
 	public Rectangle getBounds() {
 		return bounds;
 	}
-
 	public void applyGamestate() {
 		Gamestate.state = state;
 	}
-
 	public void resetBools() {
 		mouseOver = false;
 		mousePressed = false;
 	}
-
 	public Gamestate getState(){
 		return state;
 	}

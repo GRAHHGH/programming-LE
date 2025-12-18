@@ -10,7 +10,7 @@ import ui.MenuButton;
 import utilz.LoadSave;
 
 
-public class Menu extends State implements Statemethods {
+public class Menu extends State implements Statemethods { // Handles the Main Menu state, including button interaction and background rendering.
 
     private MenuButton[] buttons = new MenuButton[3];
 	private BufferedImage backgroundImg, backgroundImgPink;
@@ -34,14 +34,15 @@ public class Menu extends State implements Statemethods {
 
 
     private void loadButtons() {
+        // // Initializes three buttons with specific vertical spacing and assigned gamestates
         buttons[0] = new MenuButton(Game.GAME_WIDTH / 2, (int)(150 *Game.SCALE), 0, Gamestate.PLAYING);
         buttons[1] = new MenuButton(Game.GAME_WIDTH / 2, (int)(220 *Game.SCALE), 1, Gamestate.OPTIONS);
         buttons[2] = new MenuButton(Game.GAME_WIDTH / 2, (int)(290 *Game.SCALE), 2, Gamestate.QUIT);
     }
 
 
-    @Override
-    public void update() {
+    @Override 
+    public void update() { // Updates the visual state (hover/press) for each menu button
         for(MenuButton mb : buttons)
             mb.update();
     }
@@ -50,7 +51,6 @@ public class Menu extends State implements Statemethods {
     public void draw(Graphics g) {
 
         g.drawImage(backgroundImgPink, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-        
 		g.drawImage(backgroundImg, menuX, menuY, menuWidth, menuHeight, null);
 
         for(MenuButton mb : buttons)
@@ -89,12 +89,9 @@ public class Menu extends State implements Statemethods {
     }
 
     private void resetButtons() {
-        for(MenuButton mb : buttons){
+        for(MenuButton mb : buttons)
             mb.resetBools();
-        }
-
     }
-
 
     @Override
     public void mouseMoved(MouseEvent e) {

@@ -1,7 +1,7 @@
 package main;
 import java.util.Scanner;
 
-public class MainGame {
+public class MainGame { // MainGame is the starting class that contains the main method to run the application.
 
     public static void main(String[] args){ 
         Scanner key = new Scanner(System.in);

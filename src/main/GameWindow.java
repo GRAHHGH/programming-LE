@@ -7,10 +7,10 @@ import javax.swing.JFrame;
 public class GameWindow {
     private JFrame jframe;
 
-    public GameWindow(GamePanel gamePanel){
+    public GameWindow(GamePanel gamePanel){ // GameWindow creates the physical OS window that contains the game's drawing panel.
         jframe = new JFrame();
 
-        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensures the application terminates completely when the "X" button is clicked
         jframe.add(gamePanel);
         jframe.setResizable(false);
         jframe.pack();

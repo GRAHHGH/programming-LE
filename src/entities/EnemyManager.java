@@ -10,6 +10,7 @@ import utilz.LoadSave;
 import levels.Level;
 import static utilz.Constants.EnemyConstants.*;
 
+// Manages all enemy instances, handling their animations, updates, and interactions with the player.
 public class EnemyManager {
 
 	private Playing playing;
@@ -21,18 +22,18 @@ public class EnemyManager {
 		loadEnemyImgs();
 	}
 
-	public void LoadEnemies(Level level) {
+	public void LoadEnemies(Level level) { // Populates the enemy list with data parsed from the current level image
         crabbies = level.getCrabs();
     }
 
-    public void update(int[][] lvlData, Player player) {
+    public void update(int[][] lvlData, Player player) { // Updates all active enemies and checks if the level has been cleared
 		boolean isAnyActive = false;
 		for (Crabby c : crabbies)
 			if(c.isActive()){
 				c.update(lvlData, player);
 				isAnyActive = true;
 			}
-		if(!isAnyActive)
+		if(!isAnyActive) // If no enemies remain alive, signal that the level is complete
 			playing.setLevelCompleted(true);
 			
 	}
@@ -43,7 +44,7 @@ public class EnemyManager {
 
 
 
-	private void drawCrabs(Graphics g, int xLvlOffset) {
+	private void drawCrabs(Graphics g, int xLvlOffset) { // Renders each active crab, applying offsets for camera scrolling and direction flipping
 		for (Crabby c : crabbies) 
 			if(c.isActive()){
 			g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], (int) c.getHitbox().getX() - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitbox().getY()- CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipW(), CRABBY_HEIGHT, null);
@@ -51,7 +52,7 @@ public class EnemyManager {
 		}
 	}
 
-	public void checkEnemyHit(Rectangle2D.Float AttackBox){
+	public void checkEnemyHit(Rectangle2D.Float AttackBox){ // Checks if the player's attack box intersects with any living enemy hitboxes
 		for(Crabby c : crabbies)
 			if(c.isActive())
 				if(c.getEnemyState() != DEAD)
@@ -61,6 +62,7 @@ public class EnemyManager {
 			}
 	}
 
+	// Slices the Crabby spritesheet into a 2D array based on states (rows) and frames (columns).
 	private void loadEnemyImgs() {
 		crabbyArr = new BufferedImage[5][9];
 		BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.CRABBY_SPRITE);
@@ -69,6 +71,7 @@ public class EnemyManager {
 				crabbyArr[j][i] = temp.getSubimage(i * CRABBY_WIDTH_DEFAULT, j * CRABBY_HEIGHT_DEFAULT, CRABBY_WIDTH_DEFAULT, CRABBY_HEIGHT_DEFAULT);
 	}
 
+	// Resets all enemies to their spawn points and full health for level restarts.
     public void resetAllEnemies() {
 		for(Crabby c : crabbies)
 			c.resetEnemy();

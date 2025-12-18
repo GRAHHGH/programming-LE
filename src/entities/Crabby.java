@@ -8,7 +8,8 @@ import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.Directions.*;
 import main.Game;
 
-public class Crabby extends Enemy {
+ // Represents the specific "Crabby" enemy type, defining its unique hitboxes and behavior
+public class Crabby extends Enemy { 
 
     // attack box
     private int attackBoxOffsetX;
@@ -22,7 +23,7 @@ public class Crabby extends Enemy {
         initAttackBox();
     }
 
-    private void initAttackBox(){
+    private void initAttackBox(){ // Defines the size and reach of the crab's attack area
         attackBox = new Rectangle2D.Float(x, y, (int)(82 * Game.SCALE), (int)(19 * Game.SCALE) );
         attackBoxOffsetX = (int)(Game.SCALE * 30);
     }
@@ -34,12 +35,12 @@ public class Crabby extends Enemy {
         updateAttackBox();
     }
 
-    private void updateAttackBox() {
+    private void updateAttackBox() { // Keeps the attack box attached to the crab's current position
         attackBox.x = hitbox.x - attackBoxOffsetX;
         attackBox.y = hitbox.y;
     }
 
-    private void updateBehavior(int[][] lvlData, Player player) {
+    private void updateBehavior(int[][] lvlData, Player player) { // Determines if the crab should walk, turn, or strike.
         if (firstUpdate)
             firstUpdateCheck(lvlData);
 
@@ -74,6 +75,7 @@ public class Crabby extends Enemy {
         }
     }
 
+    // Logic for flipping the sprite horizontally when changing direction
     public int flipX(){
         if(walkDir == right)
             return width;

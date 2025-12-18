@@ -1,4 +1,6 @@
 package entities;
+
+// Static imports allow direct access to utility methods and game constants
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.Directions.*;
 import static utilz.HelpMethods.*;
@@ -8,6 +10,7 @@ import java.awt.geom.Rectangle2D;
 
 import main.Game;
 
+// An abstract class defining the universal behavior, physics, and behavior for all enemies.
 public abstract class Enemy extends Entity {
    	protected int enemyType;
     protected boolean firstUpdate = true;
@@ -26,13 +29,13 @@ public abstract class Enemy extends Entity {
         walkSpeed = Game.SCALE * 0.35f;
     }
     
-    protected void firstUpdateCheck(int[][] lvlData){
+    protected void firstUpdateCheck(int[][] lvlData){ // Checks on the first frame if the enemy is starting in the air.
         if(!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
         firstUpdate = false;
     }
 
-    protected void updateInAir(int[][] lvlData){
+    protected void updateInAir(int[][] lvlData){ // Handles falling physics and snapping to the floor upon landing.
             if(CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)){
                 hitbox.y += airSpeed;
                 airSpeed += GRAVITY;
@@ -44,7 +47,7 @@ public abstract class Enemy extends Entity {
             }
     }
 
-        protected void move(int[][] lvlData){
+        protected void move(int[][] lvlData){ // Standard patrol movement logic including edge and wall detection
                 float xSpeed = 0;
 
                 if(walkDir == left)
@@ -61,7 +64,7 @@ public abstract class Enemy extends Entity {
                 changeWalkDir();
         }
 
-    protected void turnTowardsPlayer(Player player){
+    protected void turnTowardsPlayer(Player player){ // Changes walking direction to face the player's current X position.
         if(player.hitbox.x > hitbox.x)
             walkDir = right;
         else
@@ -69,7 +72,7 @@ public abstract class Enemy extends Entity {
 
     }
 
-    protected boolean canSeePlayer(int[][] lvlData, Player player){
+    protected boolean canSeePlayer(int[][] lvlData, Player player){ // Checks if the player is on the same row and in a clear line of sight.
         int playerTileY = (int)(player.getHitbox().getY() / Game.TILES_SIZE);
         if(playerTileY == tileY)
             if(isPlayerInRange(player)){
@@ -80,24 +83,24 @@ public abstract class Enemy extends Entity {
         return false;
     }
 
-    protected boolean isPlayerInRange(Player player) {
+    protected boolean isPlayerInRange(Player player) { // Checks if player is within general detection range.
         int absValue = (int)Math.abs(player.hitbox.x - hitbox.x);
         return absValue <= attackDistance * 5;
     }
 
-    protected boolean isPlayerCloseForAttack(Player player){
+    protected boolean isPlayerCloseForAttack(Player player){ //Checks if player is close enough to trigger an attack state.
         int absValue = (int)Math.abs(player.hitbox.x - hitbox.x);
         return absValue <= attackDistance;
     }
 
 
-    protected void newState(int enemyState){
+    protected void newState(int enemyState){ // Transitions the enemy to a new state and resets animation counters.
         this.state = enemyState;
         aniTick = 0;
         aniIndex = 0;
     }
 
-    public void hurt(int amount){
+    public void hurt(int amount){ // Reduces health and triggers the HIT or DEAD state.
         currentHealth -= amount;
         if(currentHealth <= 0)
             newState(DEAD);
@@ -105,13 +108,13 @@ public abstract class Enemy extends Entity {
             newState(HIT);
     }
 
-    protected void checkPlayerHit(Rectangle2D.Float attackBox, Player player) {
+    protected void checkPlayerHit(Rectangle2D.Float attackBox, Player player) { // Checks if the enemy's attack box overlaps with the player's hitbox.
         if(attackBox.intersects(player.hitbox))
             player.changeHealth(-GetEnemyDmg(enemyType));
         attackChecked = true;
     }
 
-    protected void updateAnimationTick(){
+    protected void updateAnimationTick(){ // Updates animation frames and handles state resets after animations end
 		aniTick++;
 		if (aniTick >= ANI_SPEED) {
 			aniTick = 0;
@@ -135,7 +138,7 @@ public abstract class Enemy extends Entity {
             walkDir = left;
     }
 
-    public void resetEnemy(){
+    public void resetEnemy(){ // Resets the enemy to its initial position and state for level restarts.
         hitbox.x = x;
         hitbox.y = y;
         firstUpdate = true;

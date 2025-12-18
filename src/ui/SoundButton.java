@@ -6,8 +6,9 @@ import java.awt.image.BufferedImage;
 import utilz.LoadSave;
 import static utilz.Constants.UI.PauseButtons.*;
 
+// An interactive toggle button specifically for audio settings
+// It manages two rows of sprites (Unmuted/Muted) and three columns of states (Normal/Hover/Click)
 public class SoundButton extends PauseButton{
-
 
     private BufferedImage[][] soundImgs;
     private boolean mouseOver, mousePressed;
@@ -17,9 +18,12 @@ public class SoundButton extends PauseButton{
     public SoundButton(int x, int y, int width, int height) {
         super(x, y, width, height);
 
-        loadSoundImages();
+        loadSoundImages(); // Extracts frames from the sprite atlas
     }
-    private void loadSoundImages() {
+
+    // Slices the sound button atlas into a 2x3 grid
+    // Row 0: Unmuted, Row 1: Muted. Columns: Normal, Hover, Pressed
+    private void loadSoundImages() { 
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.SOUND_BUTTONS);
         soundImgs = new BufferedImage[2][3];
 
@@ -28,6 +32,7 @@ public class SoundButton extends PauseButton{
                 soundImgs[j][i] = temp.getSubimage(i*SOUND_SIZE_DEFAULT, j*SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT);
     }
 
+    // Logic to determine exactly which frame index should be rendered
     public void update(){
         if(muted)
             rowIndex = 1;

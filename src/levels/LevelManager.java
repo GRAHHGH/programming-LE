@@ -8,20 +8,22 @@ import gamestates.Gamestate;
 import main.Game;
 import utilz.LoadSave;
 
+// Manages the loading, switching, and drawing of all game levels
 public class LevelManager {
 
     private Game game;
     private BufferedImage[] levelSprites;
     private ArrayList<Level> levels;
-    private  int lvlIndex = 0;
+    private  int lvlIndex = 0; // Tracks the current active level
 
     public LevelManager(Game game){
         this.game = game;
-        importOutsideSprites();
+        importOutsideSprites(); // Slices the spritesheet into individual tiles
         levels = new ArrayList<>();
-        buildAlllevels();
+        buildAlllevels(); // Initializes all Level objects from the res/lvls folder
     }
     
+    // Advances the game to the next level and resets entities/objects for the new map.
     public void loadNextLevel(){
         lvlIndex++;
         if(lvlIndex >= levels.size()){
@@ -31,19 +33,21 @@ public class LevelManager {
         }
 
         Level newLevel = levels.get(lvlIndex);
+        // Update all managers with the new level's specific data
         game.getPlaying().getEnemyManager().LoadEnemies(newLevel);
         game.getPlaying().getPlayer().loadLvlData(newLevel.getLevelData());
         game.getPlaying().setMaxLvlOffset(newLevel.getLvlOffset());
         game.getPlaying().getObjectManager().loadObjects(newLevel);
     }
 
+    // Fetches all level images and creates a new Level object for each one
     private void buildAlllevels() {
         BufferedImage[] allLevels = LoadSave.GetAllLevels();
         for(BufferedImage img : allLevels)
             levels.add(new Level(img));
     }
 
-
+    // Slices the master tile atlas into sub-images for easy index-based drawing
 	private void importOutsideSprites() {
 		BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
 		levelSprites = new BufferedImage[48];
@@ -54,7 +58,7 @@ public class LevelManager {
 			}
 	}
 
-
+    // Renders the tilemap to the screen, applying the camera offset for scrolling
 	public void draw(Graphics g, int lvlOffset) {
 		for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
 			for (int i = 0; i < levels.get(lvlIndex).getLevelData()[0].length; i++) {
@@ -63,17 +67,16 @@ public class LevelManager {
 			}
 	}
 
+    // Getters for accessing level state and count
     public void update(){
-
+        // reserved for future updates (plan was keep updating after break)
     }
     public Level getCurrentLevel(){
         return levels.get(lvlIndex);
     }
-
     public int getAmountOfLevels(){
         return levels.size();
     }
-
     public int getLevelIndex(){
         return lvlIndex;
     }

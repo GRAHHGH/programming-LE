@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 public class LoadSave {
     
+    // --- Resource Path Constants ---
     public static final String PLAYER_ATLAS = "res/finalCharacter.png";
     public static final String LEVEL_ATLAS = "res/outside_sprites.png";
     public static final String LEVEL_DESIGN_ATLAS = "res/design_blocks.png";
@@ -60,13 +61,15 @@ public class LoadSave {
             }
         return img;
     }
-
+    
+    // Finds and loads all level images from the 'res/lvls' folder.
+    // it sorts them numerically (1.png, 2.png, etc.) so levels play in the correct order.
     public static BufferedImage[] GetAllLevels(){
         URL url = LoadSave.class.getResource("/res/lvls");
         File file = null;
 
         try {
-            file = new File(url.toURI());
+            file = new File(url.toURI()); // Convert URL to URI to handle spaces or special characters in folder names
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -74,7 +77,7 @@ public class LoadSave {
         File[] files = file.listFiles();
         File[] filesSorted = new File[files.length];
 
-        for(int i = 0; i < filesSorted.length; i++)
+        for(int i = 0; i < filesSorted.length; i++) // Ensure the directory isn't empty before sorting
             for(int j = 0; j < files.length; j++){
                 if(files[j].getName().equals((i + 1) + ".png"))
                     filesSorted[i] = files[j];
@@ -82,7 +85,7 @@ public class LoadSave {
 
         BufferedImage[] imgs = new BufferedImage[filesSorted.length];
 
-        for(int i = 0; i < imgs.length; i++)
+        for(int i = 0; i < imgs.length; i++) // Read each sorted file into the BufferedImage array
             try {
                 imgs[i] = ImageIO.read(filesSorted[i]);
             } catch (IOException e) {

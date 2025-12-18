@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 import static utilz.Constants.UI.PauseButtons.SOUND_SIZE;
 
+// Manages the sound and volume UI components, providing a bridge to the AudioPlayer
 public class AudioOptions {
     
     private VolumeButton volumeButton;
@@ -17,17 +18,19 @@ public class AudioOptions {
     private Game game;
     public AudioOptions(Game game){
         this.game = game;
-        createSoundButtons();
-        createVolumeButton();
+        createSoundButtons(); // Initializes mute toggles for Music and SFX
+        createVolumeButton(); // Initializes the horizontal volume slider
     }
 
     private void createVolumeButton() {
+        // Calculates scaled positioning for the volume slider
         int vX = (int)(309*Game.SCALE);
         int vY = (int)(278*Game.SCALE);
         volumeButton = new VolumeButton(vX, vY, SLIDER_WIDTH, VOLUME_HEIGHT);
     }
 
     private void createSoundButtons() {
+        // Sets coordinates for the mute buttons using the global Game.SCALE
         int soundX = (int)(450*Game.SCALE);
         int musicY = (int)(140*Game.SCALE);
         int sfxY = (int)(186*Game.SCALE);
@@ -36,6 +39,7 @@ public class AudioOptions {
     }
 
     public void update(){
+        // Updates hover/click visual states for all audio components
         musicButton.update();
         sfxButton.update();
         volumeButton.update();
@@ -50,6 +54,7 @@ public class AudioOptions {
         volumeButton.draw(g);
     }
 
+    // Handles movement of the volume slider knob and updates actual game volume
    public void mouseDragged(MouseEvent e){
         if(volumeButton.isMousePressed()){
             float valueBefore = volumeButton.getFloatValue();
@@ -63,6 +68,7 @@ public class AudioOptions {
     }
 
     public void mousePressed(MouseEvent e) {
+    // Checks which UI element the user is currently clicking
         if(isIn(e, musicButton))
             musicButton.setMousePressed(true);
         else if(isIn(e, sfxButton))
@@ -73,6 +79,7 @@ public class AudioOptions {
 
 
     public void mouseReleased(MouseEvent e) {
+    // Toggles mute status when a mouse button is released over a button
         if(isIn(e, musicButton)){
             if(musicButton.isMousePressed()){
                 musicButton.setMuted(!musicButton.isMuted());
@@ -85,13 +92,14 @@ public class AudioOptions {
                 game.getAudioPlayer().toggleEffectMute();
             }
         }
-
+        // Resets visual states for all components
         musicButton.resetBools();
         sfxButton.resetBools();    
         volumeButton.resetBools();
     }
 
     public void mouseMoved(MouseEvent e) {
+        // Updates the "hover" visual state for buttons
         musicButton.setMouseOver(false);
         sfxButton.setMouseOver(false);
         volumeButton.setMouseOver(false);
@@ -104,7 +112,7 @@ public class AudioOptions {
             volumeButton.setMouseOver(true);
     }
 
-
+    // Helper method to determine if a mouse event is within a UI button's bounds
     private boolean isIn(MouseEvent e, PauseButton b){
         return b.getBounds().contains(e.getX(), e.getY());
     }

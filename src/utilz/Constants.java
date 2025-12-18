@@ -4,8 +4,8 @@ import main.Game;
 
 public class Constants {
 
-    public static final float GRAVITY = 0.02f * Game.SCALE;
-    public static final int ANI_SPEED = 25;
+    public static final float GRAVITY = 0.02f * Game.SCALE; // how fast entity falls
+    public static final int ANI_SPEED = 25; // lower = faster animation cycles
 
     public static class Projectiles{
         public static final int CANNON_BALL_DEFAULT_WIDTH = 15;
@@ -13,9 +13,10 @@ public class Constants {
 
         public static final int CANNON_BALL_WIDTH = (int)(Game.SCALE * CANNON_BALL_DEFAULT_WIDTH);
         public static final int CANNON_BALL_HEIGHT = (int)(Game.SCALE * CANNON_BALL_DEFAULT_HEIGHT);
-        public static final float SPEED = 0.8f * Game.SCALE;
+        public static final float SPEED = 0.8f * Game.SCALE; // travel speed of projectile 
     }
 
+    // IDs and dimensions for interactive world objects (Potions, Containers, Traps)
     public static class ObjectConstants{
         public static final int RED_POTION = 0;
         public static final int BLUE_POTION = 1;
@@ -65,6 +66,7 @@ public class Constants {
     }
 
 
+    // Constants for Enemy behavior and stats
 	public static class EnemyConstants {
 		public static final int CRABBY = 0;
 
@@ -79,7 +81,7 @@ public class Constants {
 
 		public static final int CRABBY_WIDTH = (int) (CRABBY_WIDTH_DEFAULT * Game.SCALE);
 		public static final int CRABBY_HEIGHT = (int) (CRABBY_HEIGHT_DEFAULT * Game.SCALE);
-
+        // Offsets to center the sprite on its hitbox
         public static final int CRABBY_DRAWOFFSET_X = (int)(26 * Game.SCALE);
         public static final int CRABBY_DRAWOFFSET_Y = (int)(9 * Game.SCALE);
 
@@ -126,6 +128,7 @@ public class Constants {
 
     }
 
+    // Parallax background elements (Clouds)
     public static class Environment{
         public static final int BIG_CLOUD_WIDTH_DEFAULT = 448;
         public static final int BIG_CLOUD_HEIGHT_DEFAULT = 101;
@@ -139,6 +142,7 @@ public class Constants {
 
     }
 
+    // UI Dimensions for buttons and sliders
     public static class UI{
         public static class Buttons{
             public static final int B_WIDTH_DEFAULT = 140;
@@ -170,6 +174,7 @@ public class Constants {
         }
     }
 
+    // Directions used for movement and collisions
     public static class Directions{
         public static final int left = 0;
         public static final int up = 1;
@@ -178,8 +183,9 @@ public class Constants {
 
     }
 
-public static class PlayerConstants {
-        // The rows in sprite sheet
+    // Action mapping for the Player character
+    public static class PlayerConstants {
+        // These integers match the ROW index in your playerAtlas.png
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
         public static final int ATTACK = 4;
@@ -188,6 +194,7 @@ public static class PlayerConstants {
         public static final int BEFORE_LANDING = 7;
         public static final int HIT = 9;
 
+        // Returns the total sprite frames per row for the player
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {
                 case DEAD:

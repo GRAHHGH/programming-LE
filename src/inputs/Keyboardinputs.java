@@ -7,6 +7,7 @@ import gamestates.Gamestate;
 import main.Game;
 import main.GamePanel;
 
+// Listens for keyboard hardware events and routes them to the active game state.
 public class Keyboardinputs implements KeyListener {
 
     private GamePanel gamePanel;
@@ -16,7 +17,7 @@ public class Keyboardinputs implements KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) { // triggers when keyboard is press
         switch (Gamestate.state) {
             case MENU: 
                 gamePanel.getGame().getMenu().keyPressed(e);
@@ -38,7 +39,7 @@ public class Keyboardinputs implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) { // triggers when keyboard is released
         switch (Gamestate.state) {
             case MENU: 
                 gamePanel.getGame().getMenu().keyReleased(e);

@@ -7,6 +7,8 @@ import java.awt.event.MouseMotionListener;
 import gamestates.Gamestate;
 import main.GamePanel;
 
+// Captures mouse hardware inputs and delegates them to the appropriate gamestate classes.
+// basically here contains the function of the mouse and responsible to trigger the animation in buttons
 public class MouseInputs implements MouseListener, MouseMotionListener {
 
     private GamePanel gamePanel;
@@ -15,7 +17,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) { // triggers when mouse is clicked
         switch(Gamestate.state){
             case PLAYING:
                 gamePanel.getGame().getPlaying().mouseClicked(e);
@@ -35,7 +37,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) { // triggers when mouse is pressed
         switch(Gamestate.state){
             case MENU:
                 gamePanel.getGame().getMenu().mousePressed(e);
@@ -62,7 +64,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) { // triggers when mouse is released
         switch(Gamestate.state){
             case MENU:
                 gamePanel.getGame().getMenu().mouseReleased(e);
@@ -79,7 +81,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) {  // triggers when mouse is dragged
         switch(Gamestate.state){
             case PLAYING:
                 gamePanel.getGame().getPlaying().mouseDragged(e);
@@ -94,7 +96,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent e) { // triggers when mouse is moved
         switch(Gamestate.state){
             case MENU:
                 gamePanel.getGame().getMenu().mouseMoved(e);

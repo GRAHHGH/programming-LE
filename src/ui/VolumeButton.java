@@ -14,7 +14,7 @@ public class VolumeButton extends PauseButton{
     private int buttonX, minX, maxX;
     private float floatValue = 0f;
 
-    public VolumeButton(int x, int y, int width, int height) {
+    public VolumeButton(int x, int y, int width, int height) { // the size of the buttons
         super(x+width/2, y, VOLUME_WIDTH, height);
         bounds.x -=  VOLUME_WIDTH / 2;
         buttonX = x + width / 2;
@@ -25,7 +25,7 @@ public class VolumeButton extends PauseButton{
         loadImgs();
     }
 
-    private void loadImgs() {
+    private void loadImgs() { // to load the buttons from res folder
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.VOLUME_BUTTONS);
         imgs = new BufferedImage[3];
         for(int i = 0; i < imgs.length; i++)
@@ -42,7 +42,7 @@ public class VolumeButton extends PauseButton{
             index = 2;
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g){ // to draw the buttons
         g.drawImage(slider, x, y, width, height, null);
         g.drawImage(imgs[index], buttonX - VOLUME_WIDTH / 2, y, VOLUME_WIDTH, height, null);
     }

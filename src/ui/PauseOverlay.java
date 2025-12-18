@@ -10,6 +10,7 @@ import gamestates.Playing;
 import main.Game;
 import utilz.LoadSave;
 
+// Manages the UI components and interactions when the game is paused
 public class PauseOverlay {
 
     private Playing playing;
@@ -21,11 +22,12 @@ public class PauseOverlay {
     public PauseOverlay(Playing playing){
         this.playing = playing;
         loadBackground();
+        // Pulls audio options from the main game class for state persistence
         audioOptions = playing.getGame().getAudioOptions();
-
-        createUrmButtons();
+        createUrmButtons(); // Initializes navigation buttons
     }
 
+    // Creates and positions the Menu, Replay, and Unpause buttons 
     private void createUrmButtons() {
         int menuX = (int)(313*Game.SCALE);
         int replayY = (int)(387*Game.SCALE);
@@ -36,6 +38,7 @@ public class PauseOverlay {
         unpauseB = new UrmButton(unpauseX, bY, URM_SIZE, URM_SIZE, 0);
     }
 
+    // Logic for button interaction on mouse release
     private void loadBackground() {
         backgroundimg = LoadSave.GetSpriteAtlas(LoadSave.PAUSE_BACKGROUND);
         bgW = (int)(backgroundimg.getWidth() * Game.SCALE);
@@ -79,7 +82,7 @@ public class PauseOverlay {
             audioOptions.mousePressed(e);
     }
 
-
+    // Logic for button interaction on mouse release
     public void mouseReleased(MouseEvent e) {
         if(isIn(e, menuB)){
             if(menuB.isMousePressed()){
@@ -124,6 +127,7 @@ public class PauseOverlay {
     }
 
 
+    // Helper to detect if the mouse is over a button based on its bounds
     private boolean isIn(MouseEvent e, PauseButton b){
         return b.getBounds().contains(e.getX(), e.getY());
     }

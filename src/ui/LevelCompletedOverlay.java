@@ -10,6 +10,7 @@ import main.Game;
 import utilz.LoadSave;
 import static utilz.Constants.UI.URMButtons.*;
 
+// Handles the visual overlay and logic displayed after a player finishes a level
 public class LevelCompletedOverlay {
     
     private Playing playing;
@@ -19,14 +20,17 @@ public class LevelCompletedOverlay {
 
     public LevelCompletedOverlay(Playing playing){
         this.playing = playing;
-        initImg();
-        initButtons();
+        initImg(); // Loads and centers the success message image
+        initButtons(); // Initializes the interactive buttons
     }
 
     private void initButtons() {
+        // Calculates scaled positioning for the navigation buttons
         int menuX = (int)(330 * Game.SCALE);
         int nextX = (int)(445 * Game.SCALE);
         int y = (int)(195 * Game.SCALE);
+
+        // 0 index is the 'Forward/Next' icon, 2 index is the 'Menu' icon
         next = new UrmButton(nextX, y, URM_SIZE, URM_SIZE, 0);
         menu = new UrmButton(menuX, y, URM_SIZE, URM_SIZE, 2);
     }
@@ -64,6 +68,7 @@ public class LevelCompletedOverlay {
             next.setMouseOver(true);
     }
 
+    // Handles the logic for when a player clicks a button on the overlay.
     public void mouseReleased(MouseEvent e){
         if(isIn(menu, e)){
             if(menu.isMousePressed()){

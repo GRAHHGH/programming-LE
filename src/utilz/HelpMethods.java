@@ -7,9 +7,11 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import objects.Projectile;
 
+
+// utility class containing static methods to help with collision detection, movement validation, and level data interpretation.
 public class HelpMethods {
 
-	public static boolean CanMoveHere(float x, float y, float width, float height, int[][] lvlData) {
+	public static boolean CanMoveHere(float x, float y, float width, float height, int[][] lvlData) { // checks for four courners of an entity so that the hitbox will not overlap with the tile
 		if (!IsSolid(x, y, lvlData))
 			if (!IsSolid(x + width, y + height, lvlData))
 				if (!IsSolid(x + width, y, lvlData))
@@ -18,7 +20,7 @@ public class HelpMethods {
 		return false;
 	}
 
-    private static boolean IsSolid(float x, float y, int[][] lvlData){
+    private static boolean IsSolid(float x, float y, int[][] lvlData){ // convert pixel into tiles to check if a specific point in the game world is a solid obstacle.
         int maxWidth = lvlData[0].length * Game.TILES_SIZE;
 		if(x < 0 || x >= maxWidth)
             return true;
@@ -49,7 +51,7 @@ public class HelpMethods {
 		return false;
 	}
 
-    public static float GetEntityXPosNextToWall(Rectangle2D.Float hitbox, float xSpeed) {
+    public static float GetEntityXPosNextToWall(Rectangle2D.Float hitbox, float xSpeed) { // prevents entity to getting stuck inside the tile 
 		int currentTile = (int) (hitbox.x / Game.TILES_SIZE);
 		if (xSpeed > 0) {
 			// Right
@@ -101,14 +103,14 @@ public class HelpMethods {
 			return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);
 	}
 
-	public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
+	public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) { // to prevent entity or mobs walk to the edge 
 		for (int i = 0; i < xEnd - xStart; i++)
 			if (IsTileSolid(xStart + i, y, lvlData))
 				return false;
 		return true;
 	}
 
-	public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
+	public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) { //checks if the path is walkable 
 		if (IsAllTilesClear(xStart, xEnd, y, lvlData))
 			for (int i = 0; i < xEnd - xStart; i++) {
 				if (!IsTileSolid(xStart + i, y + 1, lvlData))
@@ -118,7 +120,7 @@ public class HelpMethods {
 	}
 
 
-	public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
+	public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) { //return true if there are no solid blocks
 		int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
 		int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
 
@@ -129,7 +131,7 @@ public class HelpMethods {
 	}
 
 
-	public static Point GetPlayerSpawn(BufferedImage img){
+	public static Point GetPlayerSpawn(BufferedImage img){ //scans the level image and get that to set the player spawn
         for(int j = 0; j < img.getHeight(); j++)
             for(int i = 0; i < img.getWidth(); i++){
                 Color color = new Color(img.getRGB(i, j));

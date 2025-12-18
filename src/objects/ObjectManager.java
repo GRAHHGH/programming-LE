@@ -15,12 +15,15 @@ import static utilz.Constants.Projectiles.*;
 import static utilz.HelpMethods.CanCannonSeePlayer;
 import static utilz.HelpMethods.IsProjectileHittingLevel;
 
+// Manages all game objects (potions, containers, traps, cannons) and their interactions with the player.
 public class ObjectManager {
 
     private Playing playing;
     private BufferedImage[][] potionImgs, containerImgs;
     private BufferedImage[] cannonImgs;
     private BufferedImage spikeImg, cannonBallImg;
+    
+    // Collections to store all active objects in the current level
     private ArrayList<Potion> potions;
     private ArrayList<GameContainer> containers;
     private ArrayList<Spike> spikes;
@@ -32,14 +35,14 @@ public class ObjectManager {
         loadImgs();
     }
 
-    public void checkSpikesTouched(Player p){
+    public void checkSpikesTouched(Player p){ // Instantly kills the player if their hitbox overlaps with a spike trap.
         for(Spike s : spikes)
             if(s.getHitbox().intersects(p.getHitbox()))
                 p.kill();
 
     }
 
-    public void checkObjectTouched(Rectangle2D.Float hitbox){
+    public void checkObjectTouched(Rectangle2D.Float hitbox){ // Checks if the player has walked over a potion to collect it.
         for(Potion p : potions)
             if(p.isActive()){
                 if(hitbox.intersects(p.getHitbox())){
@@ -49,13 +52,14 @@ public class ObjectManager {
             }
     }
 
-    public void applyEffectToPlayer(Potion p){
+    public void applyEffectToPlayer(Potion p){ // Determines which stat to buff based on the potion type (Red = Health, Blue = Power(i might add soon)).
         if(p.getObjType() == RED_POTION)
             playing.getPlayer().changeHealth(RED_POTION_VALUE);
         else
             playing.getPlayer().changePower(BLUE_POTION_VALUE);
     }
 
+    // Handles the destruction of barrels/boxes and spawns a potion inside them.
     public void checkObjectHit(Rectangle2D.Float attackBox){
         for(GameContainer gc : containers)
             if(gc.isActive() && !gc.doAnimation){
@@ -107,6 +111,7 @@ public class ObjectManager {
         cannonBallImg = LoadSave.GetSpriteAtlas(LoadSave.CANNON_BALL);
     }
     
+    // Updates the logic for all active objects, including projectiles and cannon behavior.
     public void update(int[][] lvlData, Player player){
         for(Potion p : potions)
             if(p.isActive())
@@ -121,6 +126,7 @@ public class ObjectManager {
     }
 
 
+    // Moves projectiles and checks for hits against the player or the level tiles.
     private void updateProjetiles(int[][] lvlData, Player player) {
         for(Projectile p : projectiles)
             if(p.isActive()){
@@ -151,6 +157,7 @@ public class ObjectManager {
         return false;
     }
 
+    // Cannon behavior: Fires if the player is in range, in front, and in a clear line of sight.
     private void updateCannon(int[][] lvlData, Player player) {
         for(Cannon c : cannons){
             if(!c.doAnimation)
@@ -183,7 +190,7 @@ public class ObjectManager {
         projectiles.add(new Projectile((int)c.getHitbox().x, (int)c.getHitbox().y, dir));
     }
 
-    public void draw(Graphics g, int xLvlOffset){
+    public void draw(Graphics g, int xLvlOffset){ // Iterates through all object types to render them with the current camera offset.
         drawPotions(g, xLvlOffset);
         drawContainers(g, xLvlOffset);
         drawTraps(g, xLvlOffset);
@@ -254,7 +261,7 @@ public class ObjectManager {
     }
 }
 
-    public void resetAllObject(){
+    public void resetAllObject(){ // Clears and reloads all objects from the level data for restarts or level transitions
         System.out.println("Sive of Arrays: " + potions.size() + "|" + containers.size());
         loadObjects(playing.getLevelManager().getCurrentLevel());
 
