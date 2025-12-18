@@ -1,5 +1,6 @@
 package main;
 import java.util.Scanner;
+import static main.secretfile.typeMessage;
 
 public class MainGame { // MainGame is the starting class that contains the main method to run the application.
 
@@ -11,8 +12,11 @@ public class MainGame { // MainGame is the starting class that contains the main
     yn = key.next().charAt(0);
 
     if(yn == 'y' || yn == 'Y'){
-     //   typeMessage(secretfile.YES);
-     //   typeMessage(secretfile.jaryl);
+        typeMessage(secretfile.YES);
+        typeMessage(secretfile.jaryl);
+        typeMessage(secretfile.gerose);
+        typeMessage(secretfile.francis);
+        typeMessage(secretfile.jd);
         new Game(); // to access contructor which is the game.java
     }
     else{

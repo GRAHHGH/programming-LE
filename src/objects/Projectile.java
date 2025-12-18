@@ -1,10 +1,9 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
-
+import java.awt.Graphics;
 import main.Game;
-
-import static utilz.Constants.ObjectConstants.*;
 import static utilz.Constants.Projectiles.*;
 
 // Represents a moving cannonball fired into the game world
@@ -20,8 +19,15 @@ public class Projectile {
         if(dir == 1)
             xOffset = (int)(29 * Game.SCALE);
 
-        hitbox = new Rectangle2D.Float(x + xOffset, y + yOffset, CANNON_WIDTH, CANNON_HEIGHT);
+        hitbox = new Rectangle2D.Float(x + xOffset, y + yOffset, 18, 18);
         this.dir = dir;
+    }
+
+    public void drawHitbox(Graphics g, int xLvlOffset, int yLvlOffset) {
+        if(Game.DRAW_HITBOXES){ 
+            g.setColor(Color.RED);
+            g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y - yLvlOffset, (int) hitbox.width, (int) hitbox.height);
+        }
     }
 
     public void updatePos(){ // Updates the horizontal position based on direction and the global SPEED constant

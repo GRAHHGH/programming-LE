@@ -176,6 +176,9 @@ public class Playing extends State implements Statemethods {
         player.render(g, xLvlOffset, yLvlOffset);
         enemyManager.draw(g, xLvlOffset, yLvlOffset);
         objectManager.draw(g, xLvlOffset, yLvlOffset);
+        
+        if (Game.DRAW_HITBOXES) 
+            objectManager.drawAllHitboxes(g, xLvlOffset, yLvlOffset);
 
         if(paused){ // Render situational UI based on state flags
             g.setColor(new Color(0,0,0, 150));

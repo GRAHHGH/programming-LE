@@ -1,5 +1,8 @@
 package objects;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import main.Game;
 
 public class Potion extends GameObject { // Represents collectible potions with animated frames and a floating hover effect
@@ -34,5 +37,13 @@ public class Potion extends GameObject { // Represents collectible potions with 
 
         hitbox.y = y + hoverOffset;
     }
+
+    public void drawHitbox(Graphics g, int xLvlOffset, int yLvlOffset) {
+        if(Game.DRAW_HITBOXES){ 
+            g.setColor(Color.RED);
+            g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y - yLvlOffset, (int) hitbox.width, (int) hitbox.height);
+        }
+    }
+
     
 }

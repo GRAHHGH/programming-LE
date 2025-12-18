@@ -200,8 +200,10 @@ public class ObjectManager {
 
     private void drawProjectiles(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(Projectile p : projectiles)
-            if(p.isActive())
+            if(p.isActive()){
                 g.drawImage(cannonBallImg, (int)(p.getHitbox().x - xLvlOffset), (int)(p.getHitbox().y - yLvlOffset), CANNON_BALL_WIDTH, CANNON_BALL_HEIGHT, null);
+                p.drawHitbox(g, xLvlOffset, yLvlOffset);
+            }
     }
 
     private void drawCannons(Graphics g, int xLvlOffset, int yLvlOffset) {
@@ -274,6 +276,34 @@ public class ObjectManager {
         
         System.out.println("Sive of Arrays after: " + potions.size() + "|" + containers.size());
 
+    }
+
+    public void drawAllHitboxes(Graphics g, int xLvlOffset, int yLvlOffset) {
+        // 1. Draw Projectiles (You already had this)
+        for (Projectile p : projectiles) {
+            if (p.isActive())
+                p.drawHitbox(g, xLvlOffset, yLvlOffset);
+        }
+
+        // 2. Draw Spikes
+        for (Spike s : spikes) {
+            s.drawHitbox(g, xLvlOffset, yLvlOffset);
+        }
+
+        // 3. Draw Cannons
+        for (Cannon c : cannons) {
+            c.drawHitbox(g, xLvlOffset, yLvlOffset);
+        }
+        
+        // 4. Draw Potions/Containers (If you have them)
+        for (Potion p : potions) {
+            if(p.isActive())
+                p.drawHitbox(g, xLvlOffset, yLvlOffset);
+        }
+        for (GameContainer gc : containers) {
+            if(gc.isActive())
+                gc.drawHitbox(g, xLvlOffset, yLvlOffset);
+        }
     }
 
 

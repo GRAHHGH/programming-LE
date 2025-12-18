@@ -61,7 +61,7 @@ public class GameObject {
        hitbox = new Rectangle2D.Float(x, y, (int)(width * Game.SCALE), (int)(height * Game.SCALE));
     }
 
-    public void drawHitbox(Graphics g, int xLvlOffset){ 
+    public void drawHitbox(Graphics g, int xLvlOffset, int yLvlOffset){ 
        if(Game.DRAW_HITBOXES){ // if you press F5 the hitbox will appear
         g.setColor(Color.RED);
         g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);

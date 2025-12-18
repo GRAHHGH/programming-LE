@@ -1,5 +1,8 @@
 package objects;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import main.Game;
 
 // Represents a stationary Cannon obstacle that exists at a specific tile height
@@ -24,5 +27,13 @@ public class Cannon extends GameObject {
     public int getTileY(){
         return tileY;
     }
+
+    public void drawHitbox(Graphics g, int xLvlOffset, int yLvlOffset) {
+        if(Game.DRAW_HITBOXES){ 
+            g.setColor(Color.RED);
+            g.drawRect((int) hitbox.x - xLvlOffset, (int) hitbox.y - yLvlOffset, (int) hitbox.width, (int) hitbox.height);
+        }
+    }
+
     
 }

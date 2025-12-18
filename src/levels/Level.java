@@ -2,7 +2,6 @@ package levels;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
