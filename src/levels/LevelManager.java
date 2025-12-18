@@ -59,11 +59,11 @@ public class LevelManager {
 	}
 
     // Renders the tilemap to the screen, applying the camera offset for scrolling
-	public void draw(Graphics g, int lvlOffset) {
-		for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
+	public void draw(Graphics g, int lvlOffset, int yLvlOffset) {
+		for (int j = 0; j < levels.get(lvlIndex).getLevelData().length; j++)
 			for (int i = 0; i < levels.get(lvlIndex).getLevelData()[0].length; i++) {
 				int index = levels.get(lvlIndex).getSpriteIndex(i, j);
-				g.drawImage(levelSprites[index], Game.TILES_SIZE * i - lvlOffset, Game.TILES_SIZE * j, Game.TILES_SIZE, Game.TILES_SIZE, null);
+				g.drawImage(levelSprites[index], Game.TILES_SIZE * i - lvlOffset, Game.TILES_SIZE * j - yLvlOffset, Game.TILES_SIZE, Game.TILES_SIZE, null);
 			}
 	}
 

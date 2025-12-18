@@ -190,21 +190,21 @@ public class ObjectManager {
         projectiles.add(new Projectile((int)c.getHitbox().x, (int)c.getHitbox().y, dir));
     }
 
-    public void draw(Graphics g, int xLvlOffset){ // Iterates through all object types to render them with the current camera offset.
-        drawPotions(g, xLvlOffset);
-        drawContainers(g, xLvlOffset);
-        drawTraps(g, xLvlOffset);
-        drawCannons(g, xLvlOffset);
-        drawProjectiles(g, xLvlOffset);
+    public void draw(Graphics g, int xLvlOffset, int yLvlOffset){ // Iterates through all object types to render them with the current camera offset.
+        drawPotions(g, xLvlOffset, yLvlOffset);
+        drawContainers(g, xLvlOffset, yLvlOffset);
+        drawTraps(g, xLvlOffset, yLvlOffset);
+        drawCannons(g, xLvlOffset, yLvlOffset);
+        drawProjectiles(g, xLvlOffset, yLvlOffset);
     }
 
-    private void drawProjectiles(Graphics g, int xLvlOffset) {
+    private void drawProjectiles(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(Projectile p : projectiles)
             if(p.isActive())
-                g.drawImage(cannonBallImg, (int)(p.getHitbox().x - xLvlOffset), (int)(p.getHitbox().y), CANNON_BALL_WIDTH, CANNON_BALL_HEIGHT, null);
+                g.drawImage(cannonBallImg, (int)(p.getHitbox().x - xLvlOffset), (int)(p.getHitbox().y - yLvlOffset), CANNON_BALL_WIDTH, CANNON_BALL_HEIGHT, null);
     }
 
-    private void drawCannons(Graphics g, int xLvlOffset) {
+    private void drawCannons(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(Cannon c : cannons){
             int x = (int)(c.getHitbox().x - xLvlOffset);
             int width = CANNON_WIDTH;
@@ -213,23 +213,23 @@ public class ObjectManager {
                 width *= -1;
             }
             g.drawImage(cannonImgs[c.getAniIndex()], 
-            x, (int)(c.getHitbox().y), width, 
+            x, (int)(c.getHitbox().y - yLvlOffset), width, 
             CANNON_HEIGHT, 
             null);
         }
     }
  
-    private void drawTraps(Graphics g, int xLvlOffset) {
+    private void drawTraps(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(Spike s : spikes)
             g.drawImage(spikeImg, 
             (int)(s.getHitbox().x - xLvlOffset), 
-            (int)(s.getHitbox().y - s.getyDrawOffset()), 
+            (int)(s.getHitbox().y - s.getyDrawOffset() - yLvlOffset), 
             SPIKE_WIDTH, 
             SPIKE_HEIGHT, 
             null);
     }
 
-    private void drawContainers(Graphics g, int xLvlOffset) {
+    private void drawContainers(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(GameContainer gc : containers)
             if(gc.isActive()){
                 int type = 0;
@@ -238,7 +238,7 @@ public class ObjectManager {
 
                 g.drawImage(containerImgs[type][gc.getAniIndex()], 
                     (int)(gc.getHitbox().x - gc.getxDrawOffset() - xLvlOffset), 
-                    (int)(gc.getHitbox().y - gc.getyDrawOffset()), 
+                    (int)(gc.getHitbox().y - gc.getyDrawOffset() - yLvlOffset), 
                     CONTAINER_WIDTH, 
                     CONTAINER_HEIGHT, 
                     null);
@@ -246,7 +246,7 @@ public class ObjectManager {
     }
 }
 
-    private void drawPotions(Graphics g, int xLvlOffset) {
+    private void drawPotions(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(Potion p : potions)
             if(p.isActive()){
                 int type = 0;
@@ -254,7 +254,7 @@ public class ObjectManager {
                     type = 1;
                 g.drawImage(potionImgs[type][p.getAniIndex()], 
                     (int)(p.getHitbox().x - p.getxDrawOffset() - xLvlOffset), 
-                    (int)(p.getHitbox().y - p.getyDrawOffset()), 
+                    (int)(p.getHitbox().y - p.getyDrawOffset() - yLvlOffset), 
                     POTION_WIDTH, 
                     POTION_HEIGHT, 
                     null);

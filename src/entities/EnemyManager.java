@@ -38,17 +38,20 @@ public class EnemyManager {
 			
 	}
 
-	public void draw(Graphics g, int xLvlOffset) {
-		drawCrabs(g, xLvlOffset);
+	public void draw(Graphics g, int xLvlOffset, int yLvlOffset) {
+		drawCrabs(g, xLvlOffset, yLvlOffset);
 	}
 
 
 
-	private void drawCrabs(Graphics g, int xLvlOffset) { // Renders each active crab, applying offsets for camera scrolling and direction flipping
+	private void drawCrabs(Graphics g, int xLvlOffset, int yLvlOffset) { // Renders each active crab, applying offsets for camera scrolling and direction flipping
 		for (Crabby c : crabbies) 
 			if(c.isActive()){
-			g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], (int) c.getHitbox().getX() - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitbox().getY()- CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipW(), CRABBY_HEIGHT, null);
-			c.drawAttackBox(g, xLvlOffset);
+			g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], 
+			(int) c.getHitbox().getX() - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(), 
+			(int) c.getHitbox().getY()- CRABBY_DRAWOFFSET_Y - yLvlOffset, CRABBY_WIDTH * c.flipW(), CRABBY_HEIGHT, null);
+			c.drawAttackBox(g, xLvlOffset, yLvlOffset);
+			
 		}
 	}
 

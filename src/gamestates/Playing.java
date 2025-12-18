@@ -33,8 +33,12 @@ public class Playing extends State implements Statemethods {
 
     // Camera scrolling variables
     private int xLvlOffset;
+    private int yLvlOffset;
+    private int maxLvlOffsetY;
     private int leftBorder = (int)(0.5*Game.GAME_WIDTH);
     private int rightBorder = (int)(0.5*Game.GAME_WIDTH);
+    private int topBorder = (int) (0.4 * Game.GAME_HEIGHT);
+    private int bottomBorder = (int) (0.6 * Game.GAME_HEIGHT);
     private int maxLvlOffsetX; 
 
     private BufferedImage backgroundImg, bigCloud, smallCloud;
@@ -66,6 +70,9 @@ public class Playing extends State implements Statemethods {
         resetAll();
         levelManager.loadNextLevel();
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
+        calcLvlOffsets();
+        xLvlOffset = 0;
+        yLvlOffset = 0;
     }
 
     private void loadStartLevel() {
@@ -75,6 +82,21 @@ public class Playing extends State implements Statemethods {
 
     private void calcLvlOffsets() {
         maxLvlOffsetX = levelManager.getCurrentLevel().getLvlOffset();
+        
+        int[][] lvlData = levelManager.getCurrentLevel().getLevelData();
+        
+        // 1. Get the height of the level in TILES 
+        int lvlHeightInTiles = lvlData.length;
+        
+        // 2. Convert tiles to PIXELS (Rows * Tile Size)
+        int lvlHeightInPixels = lvlHeightInTiles * Game.TILES_SIZE;
+
+        // 3. Calculate max offset
+        maxLvlOffsetY = lvlHeightInPixels - Game.GAME_HEIGHT;
+
+        // 4. Safety Check: If the level is smaller than the screen, don't scroll!
+        if (maxLvlOffsetY < 0)
+            maxLvlOffsetY = 0;
     }
 
     private void initClasses() {
@@ -117,21 +139,32 @@ public class Playing extends State implements Statemethods {
     }
 
     private void checkCloseToBorder() { // Calculates the camera's x-offset to keep the player centered as they move through the level.
-        int playerX = (int) Math.round(player.getHitbox().getX()); 
-        
-        int diff = playerX - xLvlOffset;
+        int playerX = (int) player.getHitbox().x;
+        int playerY = (int) player.getHitbox().y;
 
-        if(diff > rightBorder)
+        int diff = playerX - xLvlOffset;
+        int diffY = playerY - yLvlOffset;
+
+        // --- Horizontal Checks ---
+        if (diff > rightBorder)
             xLvlOffset += diff - rightBorder;
-        else if(diff < leftBorder)
+        else if (diff < leftBorder)
             xLvlOffset += diff - leftBorder;
 
-        // Boundary checks (already correct)
-        if(xLvlOffset > maxLvlOffsetX)
-            xLvlOffset = maxLvlOffsetX;
-        else if (xLvlOffset < 0)
-            xLvlOffset = 0;
-    }
+        if (xLvlOffset > maxLvlOffsetX) xLvlOffset = maxLvlOffsetX;
+        else if (xLvlOffset < 0) xLvlOffset = 0;
+
+        // --- Vertical Checks (This is the part you care about) ---
+        // If you go BELOW the bottom line, move camera DOWN
+        if (diffY > bottomBorder)
+            yLvlOffset += diffY - bottomBorder;
+        // If you go ABOVE the top line, move camera UP
+        else if (diffY < topBorder)
+            yLvlOffset += diffY - topBorder;
+
+        if (yLvlOffset > maxLvlOffsetY) yLvlOffset = maxLvlOffsetY;
+        else if (yLvlOffset < 0) yLvlOffset = 0;
+        }
 
     @Override
     public void draw(Graphics g) { // Render order: Background -> Clouds -> Level -> Entities -> UI Overlays
@@ -139,10 +172,10 @@ public class Playing extends State implements Statemethods {
 
         drawCLouds(g);
 
-        levelManager.draw(g, xLvlOffset);
-        player.render(g, xLvlOffset);
-        enemyManager.draw(g, xLvlOffset);
-        objectManager.draw(g, xLvlOffset);
+        levelManager.draw(g, xLvlOffset, yLvlOffset);
+        player.render(g, xLvlOffset, yLvlOffset);
+        enemyManager.draw(g, xLvlOffset, yLvlOffset);
+        objectManager.draw(g, xLvlOffset, yLvlOffset);
 
         if(paused){ // Render situational UI based on state flags
             g.setColor(new Color(0,0,0, 150));
@@ -157,11 +190,44 @@ public class Playing extends State implements Statemethods {
 
     private void drawCLouds(Graphics g) { // Renders big and small clouds with "Parallax Scrolling" for a depth effect.
 
-        for(int i = 0; i < 3 ; i++)
-            g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int)Math.round(xLvlOffset*0.4f), (int)(204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+        // --- 1. Big Clouds (Infinite Loop) ---
+        // Calculate total width covered by your 10 big clouds
+        int bigCloudLoopWidth = BIG_CLOUD_WIDTH * 10; 
 
-        for(int i =0; i <smallCloudsPos.length ; i++)
-            g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int)Math.round(xLvlOffset*0.6f), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
+        for (int i = 0; i < 10; i++) {
+            // A. Calculate standard parallax position
+            int xPos = (i * BIG_CLOUD_WIDTH) - (int)(xLvlOffset * 0.4f);
+            
+            // B. Use Modulo (%) to cycle the position
+            // This ensures the value never gets endlessly negative
+            xPos = xPos % bigCloudLoopWidth;
+
+            // C. Wrap-around fix: 
+            // If the cloud is fully off-screen to the left, move it to the right
+            if (xPos < -BIG_CLOUD_WIDTH)
+                xPos += bigCloudLoopWidth;
+                
+            g.drawImage(bigCloud, xPos, (int)(204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+        }
+
+        // --- 2. Small Clouds (Infinite Loop) ---
+        // Calculate total width covered by your small clouds array
+        int smallCloudGap = SMALL_CLOUD_WIDTH * 4;
+        int smallCloudLoopWidth = smallCloudsPos.length * smallCloudGap;
+
+        for (int i = 0; i < smallCloudsPos.length; i++) {
+            // A. Calculate standard parallax position
+            int xPos = (smallCloudGap * i) - (int)(xLvlOffset * 0.6f);
+            
+            // B. Modulo cycle
+            xPos = xPos % smallCloudLoopWidth;
+            
+            // C. Wrap-around fix
+            if (xPos < -SMALL_CLOUD_WIDTH) 
+                xPos += smallCloudLoopWidth;
+
+            g.drawImage(smallCloud, xPos, smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
+        }
     }
 
     public void resetAll() { // Resets all game managers and player stats when restarting a level.

@@ -29,7 +29,7 @@ public class Player extends Entity{
     private boolean attacking = false;
 
     // jumping and Gravity
-    private float jumpSpeed = -2.00f * Game.SCALE;
+    private float jumpSpeed = -1.8f * Game.SCALE;
     private float fallSpeedAfterCollision = 0.20f * Game.SCALE;
 
     // status bar UI
@@ -160,23 +160,28 @@ public class Player extends Entity{
 
     }
 
-    public void render(Graphics g, int lvlOffset){
+    public void render(Graphics g, int lvlOffset, int yLvlOffset){
 
         float drawXOffset = xDrawOffsetRight;
-        
         if (flipW == -1) {
             drawXOffset = xDrawOffsetLeft;
         }
 
+        // 1. Calculate the position as a smooth float first
+        // include the camera offsets (lvlOffset) in the calculation
+        float screenX = (hitbox.x - drawXOffset) - lvlOffset + flipX;
+        float screenY = (hitbox.y - yDrawOffset) - yLvlOffset;
+
+        // 2. Draw using Math.round() to sync perfectly with your Camera
         g.drawImage(animations[state][aniIndex], 
-                (int) (hitbox.x - drawXOffset) - lvlOffset + flipX, 
-                (int) (hitbox.y - yDrawOffset), 
+                Math.round(screenX), 
+                Math.round(screenY), 
                 width * flipW, height, null);
 
-        
-        drawAttackBox(g, lvlOffset);
+        // Debug/Utility drawing
+        drawAttackBox(g, lvlOffset, yLvlOffset);
         drawUI(g);
-        drawHitbox(g, lvlOffset); 
+        drawHitbox(g, lvlOffset, yLvlOffset);
     }
 
     private void drawUI(Graphics g) {

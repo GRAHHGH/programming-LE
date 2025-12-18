@@ -22,13 +22,18 @@ public class HelpMethods {
 
     private static boolean IsSolid(float x, float y, int[][] lvlData){ // convert pixel into tiles to check if a specific point in the game world is a solid obstacle.
         int maxWidth = lvlData[0].length * Game.TILES_SIZE;
-		if(x < 0 || x >= maxWidth)
-            return true;
-        if(y < 0 || y >= Game.GAME_HEIGHT)
-            return true;
+		// Calculate height from the level data, not the game window
+		int maxHeight = lvlData.length * Game.TILES_SIZE; 
 
-        float xIndex = x / Game.TILES_SIZE;
-        float yIndex = y / Game.TILES_SIZE;
+		if(x < 0 || x >= maxWidth)
+			return true;
+		
+		// Use maxHeight instead of Game.GAME_HEIGHT
+		if(y < 0 || y >= maxHeight) 
+			return true;
+
+		float xIndex = x / Game.TILES_SIZE;
+		float yIndex = y / Game.TILES_SIZE;
 
 		return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
 

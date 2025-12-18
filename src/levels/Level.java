@@ -2,6 +2,7 @@ package levels;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -129,5 +130,9 @@ public class Level { // The Level class parses a level image and stores all rele
     }
     public ArrayList<Cannon> getCannons(){
         return cannons;
+    }
+
+    public BufferedImage getImg() {
+        return img;
     }
 }
